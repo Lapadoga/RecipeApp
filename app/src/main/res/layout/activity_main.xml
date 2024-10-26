@@ -8,7 +8,7 @@
     android:background="@color/activity_background"
     tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/indent_main"
@@ -19,8 +19,8 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button"
-            style="@style/Widget.Material3.Button.StyleNavButton"
+            style="@style/StyleNavButton"
+            android:layout_marginEnd="@dimen/nav_button_margin"
             android:backgroundTint="@color/category_button"
             android:text="@string/button_categories"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -28,8 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button2"
-            style="@style/Widget.Material3.Button.StyleNavButton"
+            style="@style/StyleNavButton"
             android:backgroundTint="@color/favorites_button"
             android:text="@string/button_favorites"
             app:icon="@drawable/ic_heart_empty"
@@ -38,6 +37,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
