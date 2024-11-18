@@ -12,6 +12,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val fragment = CategoriesListFragment()
+        supportFragmentManager.beginTransaction().add(R.id.mainContainer, fragment).commit()
         setContentView(binding.root)
     }
 }
