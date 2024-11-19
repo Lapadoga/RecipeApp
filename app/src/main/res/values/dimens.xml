@@ -3,6 +3,5 @@
     <dimen name="indent_main">16dp</dimen>
     <dimen name="indent_half_of_main">8dp</dimen>
     <dimen name="title_size">14sp</dimen>
-    <dimen name="nav_button_radius">8dp</dimen>
     <dimen name="nav_button_margin">4dp</dimen>
 </resources>

@@ -9,7 +9,7 @@
     </style>
 
     <style name="StyleNavButton" parent="Widget.Material3.Button">
-        <item name="cornerRadius">@dimen/nav_button_radius</item>
+        <item name="cornerRadius">@dimen/indent_half_of_main</item>
         <item name="android:textAppearance">@style/StyleTitle14</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">@integer/nav_button_weight</item>

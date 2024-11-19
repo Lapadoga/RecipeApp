@@ -8,14 +8,17 @@ import androidx.fragment.app.Fragment
 import com.example.recipeapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
-    private lateinit var binding: FragmentListCategoriesBinding
+    private var _binding: FragmentListCategoriesBinding? = null
+    private val binding
+        get() = _binding
+            ?: throw IllegalStateException("Binding for CategoriesListFragment is null")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentListCategoriesBinding.inflate(inflater, container, false)
+        _binding = FragmentListCategoriesBinding.inflate(inflater, container, false)
         return binding.root
     }
 }

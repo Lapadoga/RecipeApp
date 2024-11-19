@@ -2,5 +2,4 @@
     <string name="app_name">RecipeApp</string>
     <string name="button_categories">категории</string>
     <string name="button_favorites">избранное</string>
-    <string name="main_fragment">Основной фрагмент</string>
 </resources>
