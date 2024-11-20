@@ -30,6 +30,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
+            android:id="@+id/btnCategories"
             style="@style/StyleNavButton"
             android:layout_marginEnd="@dimen/nav_button_margin"
             android:backgroundTint="@color/category_button"
@@ -39,6 +40,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
+            android:id="@+id/btnFavorites"
             style="@style/StyleNavButton"
             android:backgroundTint="@color/favorites_button"
             android:text="@string/button_favorites"
