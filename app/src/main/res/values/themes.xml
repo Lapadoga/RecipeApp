@@ -5,6 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/activity_background</item>
+        <item name="android:navigationBarColor">@color/activity_background</item>
     </style>
 
     <style name="Theme.RecipeApp" parent="Base.Theme.RecipeApp" />
