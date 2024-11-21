@@ -7,9 +7,6 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.example.recipeapp.databinding.ActivityMainBinding
 
-const val FAVORITES_TAG = "Favorites"
-const val CATEGORIES_TAG = "Categories"
-
 class MainActivity : AppCompatActivity() {
 
     private val binding: ActivityMainBinding by lazy {
@@ -47,5 +44,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    companion object {
+        private const val FAVORITES_TAG = "Favorites"
+        private const val CATEGORIES_TAG = "Categories"
     }
 }
