@@ -33,5 +33,6 @@
     <style name="StyleDescription14" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/dimen_title_14</item>
         <item name="android:fontFamily">@font/montserrat_medium</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>
