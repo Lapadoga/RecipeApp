@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/dimen_half_of_main"
+    android:layout_marginTop="@dimen/dimen_main"
+    android:clickable="true"
+    app:cardCornerRadius="@dimen/dimen_half_of_main">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/text_item_category_description"
+            android:scaleType="centerCrop"
+            android:src="@drawable/rv_image_stub" />
+
+        <TextView
+            style="@style/StyleTitle14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dimen_half_of_main"
+            android:layout_marginTop="@dimen/dimen_half_of_main"
+            android:textColor="@color/item_title"
+            tools:text="Заголовок" />
+
+        <TextView
+            style="@style/StyleDescription14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dimen_half_of_main"
+            android:layout_marginVertical="@dimen/dimen_half_of_main"
+            tools:text="Описание" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

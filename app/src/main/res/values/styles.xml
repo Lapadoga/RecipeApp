@@ -2,17 +2,36 @@
 <resources>
 
     <style name="StyleTitle14" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/title_size</item>
+        <item name="android:textSize">@dimen/dimen_title_14</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
     </style>
 
     <style name="StyleNavButton" parent="Widget.Material3.Button">
-        <item name="cornerRadius">@dimen/indent_half_of_main</item>
+        <item name="cornerRadius">@dimen/dimen_half_of_main</item>
         <item name="android:textAppearance">@style/StyleTitle14</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_weight">@integer/nav_button_weight</item>
+        <item name="android:layout_weight">@integer/int_nav_button_weight</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="StyleTitle20" parent="StyleTitle14">
+        <item name="android:textSize">@dimen/dimen_tv_contents_text</item>
+        <item name="android:textColor">@color/tv_contents</item>
+    </style>
+
+    <style name="StyleContentsTV" parent="Widget.AppCompat.TextView">
+        <item name="android:padding">@dimen/dimen_tv_contents</item>
+        <item name="android:textAppearance">@style/StyleTitle20</item>
+        <item name="android:layout_marginStart">@dimen/dimen_main</item>
+        <item name="android:layout_marginBottom">@dimen/dimen_main</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="StyleDescription14" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/dimen_title_14</item>
+        <item name="android:fontFamily">@font/montserrat_medium</item>
     </style>
 </resources>

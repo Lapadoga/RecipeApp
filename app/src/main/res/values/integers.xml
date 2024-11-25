@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="nav_button_weight">1</integer>
+    <integer name="int_nav_button_weight">1</integer>
+    <integer name="int_rv_item_count">6</integer>
+    <integer name="int_rv_column_count">2</integer>
 </resources>
