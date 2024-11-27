@@ -7,4 +7,5 @@
     <dimen name="dimen_tv_contents">10dp</dimen>
     <dimen name="dimen_tv_contents_text">20sp</dimen>
     <dimen name="dimen_layout_category_header_height">224dp</dimen>
+    <dimen name="dimen_iv_item_image_height">130dp</dimen>
 </resources>
