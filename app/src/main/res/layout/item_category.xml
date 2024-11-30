@@ -20,7 +20,6 @@
             android:id="@+id/image_category"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_iv_item_image_height"
-            android:contentDescription="@string/text_item_category_description"
             android:scaleType="centerCrop"
             android:src="@drawable/rv_image_stub" />
 

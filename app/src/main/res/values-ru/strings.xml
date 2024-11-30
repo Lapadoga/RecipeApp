@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_categories">Категории</string>
+    <string name="text_favorites">Избранное</string>
+    <string name="text_item_category_description">Картинка категории</string>
+</resources>

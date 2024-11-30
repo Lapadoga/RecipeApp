@@ -15,6 +15,16 @@ import java.io.IOException
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
+    private var itemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick()
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
     class ViewHolder(binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
         val itemTitle: TextView = binding.tvTitle
         val itemDescription: TextView = binding.tvDescription
@@ -44,9 +54,12 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         viewHolder.itemDescription.text = positionData.description
         viewHolder.itemImage.setImageDrawable(drawable)
         viewHolder.itemImage.contentDescription =
-            "Изображение категории ${positionData.title.lowercase()}"
+            "${R.string.text_item_category_description} ${positionData.title.lowercase()}"
+
+        viewHolder.itemView.setOnClickListener {
+            itemClickListener?.onItemClick()
+        }
     }
 
     override fun getItemCount() = dataSet.size
-
 }
