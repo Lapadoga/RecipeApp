@@ -18,7 +18,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     private var itemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun onItemClick()
+        fun onItemClick(categoryId: Int)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -57,7 +57,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
             "${R.string.text_item_category_description} ${positionData.title.lowercase()}"
 
         viewHolder.itemView.setOnClickListener {
-            itemClickListener?.onItemClick()
+            itemClickListener?.onItemClick(position)
         }
     }
 
