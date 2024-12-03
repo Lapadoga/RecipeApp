@@ -3,4 +3,5 @@
     <string name="text_categories">Categories</string>
     <string name="text_favorites">Favorites</string>
     <string name="text_item_category_description">Category image</string>
+    <string name="text_item_recipe_description">Recipe image</string>
 </resources>
