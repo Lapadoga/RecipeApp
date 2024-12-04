@@ -26,8 +26,8 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     }
 
     class ViewHolder(binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
-        val itemTitle: TextView = binding.tvTitle
-        val itemDescription: TextView = binding.tvDescription
+        val itemTitle: TextView = binding.tvCategoryTitle
+        val itemDescription: TextView = binding.tvCategoryDescription
         val itemImage: ImageView = binding.imageCategory
     }
 

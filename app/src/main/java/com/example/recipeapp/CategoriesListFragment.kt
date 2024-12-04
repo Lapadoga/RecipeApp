@@ -43,22 +43,24 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int, categoriesList: List<Category>) {
-        val currentCategory = categoriesList.find { it.id == categoryId }
-        if (currentCategory == null)
-            return
-        else {
-            val categoryName = currentCategory.title
-            val categoryImageUrl = currentCategory.imageUrl
-            val bundle = bundleOf(
-                "ARG_CATEGORY_ID" to categoryId,
-                "ARG_CATEGORY_NAME" to categoryName,
-                "ARG_CATEGORY_IMAGE_URL" to categoryImageUrl,
-            )
-            parentFragmentManager.commit {
-                replace<RecipesListFragment>(R.id.mainContainer, "test", bundle)
-                setReorderingAllowed(true)
-                addToBackStack(null)
-            }
+        val currentCategory = categoriesList.find { it.id == categoryId } ?: return
+        val categoryName = currentCategory.title
+        val categoryImageUrl = currentCategory.imageUrl
+        val bundle = bundleOf(
+            CATEGORY_ID_KEY to categoryId,
+            CATEGORY_NAME_KEY to categoryName,
+            CATEGORY_IMAGE_KEY to categoryImageUrl,
+        )
+        parentFragmentManager.commit {
+            replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
+            setReorderingAllowed(true)
+            addToBackStack(null)
         }
+    }
+
+    companion object{
+        const val CATEGORY_ID_KEY = "ARG_CATEGORY_ID"
+        const val CATEGORY_NAME_KEY = "ARG_CATEGORY_NAME"
+        const val CATEGORY_IMAGE_KEY = "ARG_CATEGORY_IMAGE_URL"
     }
 }
