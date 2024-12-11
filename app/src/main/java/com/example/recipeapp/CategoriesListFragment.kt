@@ -30,6 +30,11 @@ class CategoriesListFragment : Fragment() {
         initRecycler()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun initRecycler() {
         val categoriesList = STUB.getCategories()
         val categoriesAdapter = CategoriesListAdapter(categoriesList)
@@ -58,7 +63,7 @@ class CategoriesListFragment : Fragment() {
         }
     }
 
-    companion object{
+    companion object {
         const val CATEGORY_ID_KEY = "ARG_CATEGORY_ID"
         const val CATEGORY_NAME_KEY = "ARG_CATEGORY_NAME"
         const val CATEGORY_IMAGE_KEY = "ARG_CATEGORY_IMAGE_URL"

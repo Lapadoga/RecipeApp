@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
@@ -29,10 +30,11 @@ class RecipesListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val args = requireArguments()
-        categoryId = args.getInt(CategoriesListFragment.CATEGORY_ID_KEY)
-        categoryName = args.getString(CategoriesListFragment.CATEGORY_NAME_KEY)
-        categoryImageUrl = args.getString(CategoriesListFragment.CATEGORY_IMAGE_KEY)
+        with(requireArguments()) {
+            categoryId = getInt(CategoriesListFragment.CATEGORY_ID_KEY)
+            categoryName = getString(CategoriesListFragment.CATEGORY_NAME_KEY)
+            categoryImageUrl = getString(CategoriesListFragment.CATEGORY_IMAGE_KEY)
+        }
         val context = view.context
         val drawable = try {
             val stream = context?.assets?.open(categoryImageUrl!!)
@@ -50,6 +52,11 @@ class RecipesListFragment : Fragment() {
         initRecycler()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun initRecycler() {
         val dataSet = STUB.getRecipesByCategoryId(categoryId)
         val adapter = RecipesListAdapter(dataSet)
@@ -63,9 +70,15 @@ class RecipesListFragment : Fragment() {
 
     private fun openRecipeByRecipeId(recipeId: Int) {
         parentFragmentManager.commit {
-            replace<RecipeFragment>(R.id.mainContainer)
+            val recipe = STUB.getRecipeById(recipeId)
+            val bundle = bundleOf(RECIPE_KEY to recipe)
+            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
             setReorderingAllowed(true)
             addToBackStack(null)
         }
+    }
+
+    companion object {
+        const val RECIPE_KEY = "ARG_RECIPE"
     }
 }

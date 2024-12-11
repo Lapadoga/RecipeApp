@@ -1,5 +1,6 @@
 package com.example.recipeapp
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,5 +20,19 @@ class RecipeFragment : Fragment() {
     ): View {
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            arguments?.getParcelable(RecipesListFragment.RECIPE_KEY, Recipe::class.java)
+        else
+            arguments?.getParcelable(RecipesListFragment.RECIPE_KEY)
+
+        binding.tvRecipeName.text = recipe?.title
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
