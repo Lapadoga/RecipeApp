@@ -4,4 +4,6 @@
     <string name="text_favorites">Favorites</string>
     <string name="text_item_category_description">Category image</string>
     <string name="text_item_recipe_description">Recipe image</string>
+    <string name="text_title_ingredients">Ingredients</string>
+    <string name="text_title_cooking_method">Cooking method</string>
 </resources>
