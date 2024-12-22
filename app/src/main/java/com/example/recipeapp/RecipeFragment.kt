@@ -32,26 +32,27 @@ class RecipeFragment : Fragment() {
         else
             arguments?.getParcelable(RecipesListFragment.RECIPE_KEY)
 
-        val context = view.context
+        recipe?.let {
+            val context = view.context
 
-        initUI(recipe, context)
-        initRecycler(recipe!!.ingredients, recipe.method)
+            initUI(recipe, context)
+            initRecycler(recipe.ingredients, recipe.method)
+        }
     }
 
-    private fun initUI(recipe: Recipe?, context: Context) {
-
+    private fun initUI(recipe: Recipe, context: Context) {
         val drawable = try {
-            val stream = context.assets?.open(recipe!!.imageUrl)
+            val stream = context.assets?.open(recipe.imageUrl)
             Drawable.createFromStream(stream, null)
         } catch (e: IOException) {
             null
         }
 
         with(binding) {
-            tvRecipeTitle.text = recipe?.title
+            tvRecipeTitle.text = recipe.title
             ivRecipe.setImageDrawable(drawable)
             ivRecipe.contentDescription =
-                "${R.string.text_item_category_description} ${recipe?.title?.lowercase()}"
+                "${R.string.text_item_category_description} ${recipe.title.lowercase()}"
         }
     }
 
@@ -68,8 +69,6 @@ class RecipeFragment : Fragment() {
             )
             rvIngredients.adapter = IngredientsAdapter(ingredients)
             rvIngredients.addItemDecoration(ingredientsDividerDecoration)
-            rvIngredients.setHasFixedSize(true)
-            rvIngredients.isNestedScrollingEnabled = false
 
             val methodDividerDecoration = MaterialDividerItemDecoration(
                 rvMethod.context,
@@ -79,8 +78,6 @@ class RecipeFragment : Fragment() {
             methodDividerDecoration.setDividerColorResource(rvMethod.context, R.color.rv_divider)
             rvMethod.adapter = MethodAdapter(method)
             rvMethod.addItemDecoration(methodDividerDecoration)
-            rvMethod.setHasFixedSize(true)
-            rvMethod.isNestedScrollingEnabled = false
         }
     }
 

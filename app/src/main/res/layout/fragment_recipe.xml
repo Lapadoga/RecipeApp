@@ -48,9 +48,12 @@
             android:id="@+id/rvIngredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dimen_main"
-            android:layout_marginVertical="@dimen/dimen_main"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_margin="@dimen/dimen_main"
+            android:background="@drawable/shape_tv_categories"
+            android:backgroundTint="@color/white"
+            android:paddingVertical="@dimen/dimen_quarter_of_main"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_ingredient" />
 
         <TextView
             style="@style/StyleTitle20"
@@ -66,7 +69,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dimen_main"
             android:layout_marginTop="@dimen/dimen_main"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:background="@drawable/shape_tv_categories"
+            android:backgroundTint="@color/white"
+            android:paddingVertical="@dimen/dimen_quarter_of_main"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_method" />
 
     </LinearLayout>
 

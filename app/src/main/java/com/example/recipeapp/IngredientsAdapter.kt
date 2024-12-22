@@ -3,7 +3,6 @@ package com.example.recipeapp
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.recipeapp.databinding.ItemIngredientBinding.bind
 import com.example.recipeapp.databinding.ItemIngredientBinding
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
@@ -16,10 +15,8 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.item_ingredient, parent, false)
-        val binding = bind(view)
 
-        return ViewHolder(binding)
+        return ViewHolder(ItemIngredientBinding.inflate(inflater, parent, false))
     }
 
     override fun getItemCount() = dataSet.size
