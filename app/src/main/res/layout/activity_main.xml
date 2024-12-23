@@ -12,7 +12,7 @@
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/dimen_nav_button"
+        android:layout_marginBottom="@dimen/dimen_quarter_of_main"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
         <Button
             android:id="@+id/btnCategories"
             style="@style/StyleNavButton"
-            android:layout_marginEnd="@dimen/dimen_nav_button"
+            android:layout_marginEnd="@dimen/dimen_quarter_of_main"
             android:backgroundTint="@color/category_button"
             android:text="@string/text_categories"
             app:layout_constraintBottom_toBottomOf="parent"

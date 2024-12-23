@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeapp.databinding.ItemCategoryBinding
-import com.example.recipeapp.databinding.ItemCategoryBinding.bind
 import java.io.IOException
 
 
@@ -33,10 +32,8 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(viewGroup.context)
-        val view = inflater.inflate(R.layout.item_category, viewGroup, false)
-        val binding = bind(view)
 
-        return ViewHolder(binding)
+        return ViewHolder(ItemCategoryBinding.inflate(inflater, viewGroup, false))
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {

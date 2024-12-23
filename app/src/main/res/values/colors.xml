@@ -7,4 +7,6 @@
     <color name="favorites_button">#E13E3E</color>
     <color name="tv_contents">#5F3678</color>
     <color name="item_title">#422952</color>
+    <color name="rv_item_ingredient">#666666</color>
+    <color name="rv_divider">#F5F5F5</color>
 </resources>

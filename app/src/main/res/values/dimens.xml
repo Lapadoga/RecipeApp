@@ -3,10 +3,11 @@
     <dimen name="dimen_main">16dp</dimen>
     <dimen name="dimen_half_of_main">8dp</dimen>
     <dimen name="dimen_title_14">14sp</dimen>
-    <dimen name="dimen_nav_button">4dp</dimen>
+    <dimen name="dimen_quarter_of_main">4dp</dimen>
     <dimen name="dimen_tv_contents">10dp</dimen>
     <dimen name="dimen_tv_contents_text">20sp</dimen>
     <dimen name="dimen_layout_category_header_height">224dp</dimen>
     <dimen name="dimen_iv_item_category_image_height">130dp</dimen>
     <dimen name="dimen_iv_item_recipe_image_height">100dp</dimen>
+    <dimen name="dimen_item_rv_recipe">12dp</dimen>
 </resources>

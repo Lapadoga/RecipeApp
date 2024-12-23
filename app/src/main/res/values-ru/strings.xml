@@ -4,4 +4,6 @@
     <string name="text_favorites">Избранное</string>
     <string name="text_item_category_description">Картинка категории</string>
     <string name="text_item_recipe_description">Картинка рецепта</string>
+    <string name="text_title_ingredients">Ингредиенты</string>
+    <string name="text_title_cooking_method">Способ приготовления</string>
 </resources>

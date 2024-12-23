@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/dimen_item_rv_recipe"
+    android:layout_marginVertical="@dimen/dimen_half_of_main"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_method"
+        style="@style/StyleItemRVRecipe14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        tools:text="Шаг готовки" />
+</LinearLayout>
