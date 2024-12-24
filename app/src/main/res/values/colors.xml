@@ -9,4 +9,5 @@
     <color name="item_title">#422952</color>
     <color name="rv_item_ingredient">#666666</color>
     <color name="rv_divider">#F5F5F5</color>
+    <color name="font_title_16">#626466</color>
 </resources>

@@ -8,6 +8,8 @@ import com.example.recipeapp.databinding.ItemIngredientBinding
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
+    private var quantity: Int = 1
+
     class ViewHolder(binding: ItemIngredientBinding) : RecyclerView.ViewHolder(binding.root) {
         val ingredientTitle = binding.ingredientTitle
         val ingredientAmount = binding.ingredientAmount
@@ -24,6 +26,14 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val positionData = dataSet[position]
         holder.ingredientTitle.text = positionData.description
-        holder.ingredientAmount.text = "${positionData.quantity} ${positionData.unitOfMeasure}"
+        val amount = positionData.quantity.toFloat() * quantity
+        val amountString =
+            if (amount % 1 == 0F) "${amount.toInt()}" else String.format("%.1f", amount)
+        holder.ingredientAmount.text =
+            "$amountString ${positionData.unitOfMeasure}"
+    }
+
+    fun updateIngredients(progress: Int) {
+        quantity = progress
     }
 }

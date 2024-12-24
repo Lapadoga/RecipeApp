@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.example.recipeapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -57,7 +58,11 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initRecycler(ingredients: List<Ingredient>, method: List<String>) {
+        val initialQuantityString = "1"
         with(binding) {
+            val dividerInset =
+                rvIngredients.context.resources.getDimension(R.dimen.dimen_item_rv_recipe).toInt()
+
             val ingredientsDividerDecoration = MaterialDividerItemDecoration(
                 rvIngredients.context,
                 MaterialDividerItemDecoration.VERTICAL
@@ -67,7 +72,10 @@ class RecipeFragment : Fragment() {
                 rvIngredients.context,
                 R.color.rv_divider
             )
-            rvIngredients.adapter = IngredientsAdapter(ingredients)
+            ingredientsDividerDecoration.dividerInsetStart = dividerInset
+            ingredientsDividerDecoration.dividerInsetEnd = dividerInset
+            val ingredientsAdapter = IngredientsAdapter(ingredients)
+            rvIngredients.adapter = ingredientsAdapter
             rvIngredients.addItemDecoration(ingredientsDividerDecoration)
 
             val methodDividerDecoration = MaterialDividerItemDecoration(
@@ -76,8 +84,29 @@ class RecipeFragment : Fragment() {
             )
             methodDividerDecoration.isLastItemDecorated = false
             methodDividerDecoration.setDividerColorResource(rvMethod.context, R.color.rv_divider)
-            rvMethod.adapter = MethodAdapter(method)
+            methodDividerDecoration.dividerInsetStart = dividerInset
+            methodDividerDecoration.dividerInsetEnd = dividerInset
+            val methodAdapter = MethodAdapter(method)
+            rvMethod.adapter = methodAdapter
             rvMethod.addItemDecoration(methodDividerDecoration)
+
+            portionSize.text = initialQuantityString
+
+            sbPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                    portionSize.text = "$p1"
+                    ingredientsAdapter.updateIngredients(p1)
+                    ingredientsAdapter.notifyDataSetChanged()
+                }
+
+                override fun onStartTrackingTouch(p0: SeekBar?) {
+                    return
+                }
+
+                override fun onStopTrackingTouch(p0: SeekBar?) {
+                    return
+                }
+            })
         }
     }
 
