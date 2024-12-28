@@ -44,6 +44,37 @@
             android:layout_marginTop="@dimen/dimen_main"
             android:text="@string/text_title_ingredients" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_main"
+            android:layout_marginTop="@dimen/dimen_portions"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/StyleTitle16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_portions" />
+
+            <TextView
+                android:id="@+id/portionSize"
+                style="@style/StyleTitle16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_portions"
+                tools:text="1" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/sb_portions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dimen_portions"
+            android:layout_marginTop="@dimen/dimen_portions"
+            android:max="@integer/int_max_portions_count"
+            android:min="@integer/int_one" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
             android:layout_width="match_parent"
