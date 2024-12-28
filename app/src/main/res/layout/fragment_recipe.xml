@@ -68,12 +68,14 @@
 
         <SeekBar
             android:id="@+id/sb_portions"
+            style="@style/StyleSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dimen_portions"
             android:layout_marginTop="@dimen/dimen_portions"
             android:max="@integer/int_max_portions_count"
-            android:min="@integer/int_one" />
+            android:min="@integer/int_one"
+            android:progress="@integer/int_zero"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
