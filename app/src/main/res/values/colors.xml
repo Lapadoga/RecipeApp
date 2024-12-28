@@ -10,4 +10,5 @@
     <color name="rv_item_ingredient">#666666</color>
     <color name="rv_divider">#F5F5F5</color>
     <color name="font_title_16">#626466</color>
+    <color name="shape_seekbar_progress">#A1A9F9</color>
 </resources>
