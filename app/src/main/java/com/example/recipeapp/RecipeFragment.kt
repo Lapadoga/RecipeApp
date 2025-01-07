@@ -54,11 +54,15 @@ class RecipeFragment : Fragment() {
             ivRecipe.setImageDrawable(drawable)
             ivRecipe.contentDescription =
                 "${R.string.text_item_category_description} ${recipe.title.lowercase()}"
+            ibFavorites.setImageResource(R.drawable.ic_heart_empty)
+            ibFavorites.contentDescription = "${R.string.text_favorites}"
+            ibFavorites.setOnClickListener {
+                ibFavorites.setImageResource(R.drawable.ic_heart)
+            }
         }
     }
 
     private fun initRecycler(ingredients: List<Ingredient>, method: List<String>) {
-        val initialQuantityString = "1"
         with(binding) {
             val dividerInset =
                 rvIngredients.context.resources.getDimension(R.dimen.dimen_item_rv_recipe).toInt()
@@ -90,7 +94,6 @@ class RecipeFragment : Fragment() {
             rvMethod.adapter = methodAdapter
             rvMethod.addItemDecoration(methodDividerDecoration)
 
-            portionSize.text = initialQuantityString
 
             sbPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {

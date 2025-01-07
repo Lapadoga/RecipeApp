@@ -22,6 +22,18 @@
                 android:scaleType="centerCrop"
                 tools:src="@drawable/rv_image_stub" />
 
+            <ImageButton
+                android:id="@+id/ib_favorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_main"
+                android:layout_marginEnd="@dimen/dimen_main"
+                android:background="@android:color/transparent"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_heart_empty" />
+
             <TextView
                 android:id="@+id/tv_recipe_title"
                 style="@style/StyleContentsTV"
@@ -75,7 +87,7 @@
             android:layout_marginTop="@dimen/dimen_portions"
             android:max="@integer/int_max_portions_count"
             android:min="@integer/int_one"
-            android:progress="@integer/int_zero"/>
+            android:progress="2" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
