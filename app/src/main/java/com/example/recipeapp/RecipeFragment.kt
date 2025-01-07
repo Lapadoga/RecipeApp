@@ -107,6 +107,7 @@ class RecipeFragment : Fragment() {
                     return
                 }
             })
+            sbPortions.progress = 1
         }
     }
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="@dimen/dimen_seek_bar_thumb_corner" />
+    <solid android:color="@color/category_button" />
+    <size
+        android:width="@dimen/dimen_half_of_main"
+        android:height="@dimen/dimen_seek_bar_thumb_height" />
+</shape>

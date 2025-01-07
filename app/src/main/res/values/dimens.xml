@@ -12,4 +12,6 @@
     <dimen name="dimen_iv_item_recipe_image_height">100dp</dimen>
     <dimen name="dimen_item_rv_recipe">12dp</dimen>
     <dimen name="dimen_portions">6dp</dimen>
+    <dimen name="dimen_seek_bar_thumb_corner">2dp</dimen>
+    <dimen name="dimen_seek_bar_thumb_height">30dp</dimen>
 </resources>
