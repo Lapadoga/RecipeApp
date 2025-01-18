@@ -17,6 +17,7 @@ class RecipeFragment : Fragment() {
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("Binding for RecipeFragment is null")
+    private var isFavourite = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,11 +55,17 @@ class RecipeFragment : Fragment() {
             ivRecipe.setImageDrawable(drawable)
             ivRecipe.contentDescription =
                 "${R.string.text_item_category_description} ${recipe.title.lowercase()}"
+            ibFavorites.setImageResource(R.drawable.ic_heart_empty)
+            ibFavorites.contentDescription = getString(R.string.text_favorites)
+            ibFavorites.setOnClickListener {
+                val drawableId = if (isFavourite) R.drawable.ic_heart_empty else R.drawable.ic_heart
+                ibFavorites.setImageResource(drawableId)
+                isFavourite = !isFavourite
+            }
         }
     }
 
     private fun initRecycler(ingredients: List<Ingredient>, method: List<String>) {
-        val initialQuantityString = "1"
         with(binding) {
             val dividerInset =
                 rvIngredients.context.resources.getDimension(R.dimen.dimen_item_rv_recipe).toInt()
@@ -90,7 +97,6 @@ class RecipeFragment : Fragment() {
             rvMethod.adapter = methodAdapter
             rvMethod.addItemDecoration(methodDividerDecoration)
 
-            portionSize.text = initialQuantityString
 
             sbPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
