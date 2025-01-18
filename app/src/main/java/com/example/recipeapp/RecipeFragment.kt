@@ -17,7 +17,7 @@ class RecipeFragment : Fragment() {
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("Binding for RecipeFragment is null")
-    private var isFavourite = false
+    private var isFavorite = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,13 +54,32 @@ class RecipeFragment : Fragment() {
             tvRecipeTitle.text = recipe.title
             ivRecipe.setImageDrawable(drawable)
             ivRecipe.contentDescription =
-                "${R.string.text_item_category_description} ${recipe.title.lowercase()}"
-            ibFavorites.setImageResource(R.drawable.ic_heart_empty)
+                "${getString(R.string.text_item_category_description)} ${recipe.title.lowercase()}"
+
+            val favoriteRecipes = getFavorites()
+            val drawableId =
+                if (favoriteRecipes.contains(recipe.id.toString())) {
+                    isFavorite = true
+                    R.drawable.ic_heart
+                } else {
+                    isFavorite = false
+                    R.drawable.ic_heart_empty
+                }
+            ibFavorites.setImageResource(drawableId)
             ibFavorites.contentDescription = getString(R.string.text_favorites)
             ibFavorites.setOnClickListener {
-                val drawableId = if (isFavourite) R.drawable.ic_heart_empty else R.drawable.ic_heart
-                ibFavorites.setImageResource(drawableId)
-                isFavourite = !isFavourite
+                val favoriteRecipes = getFavorites()
+                val newDrawableId = if (isFavorite) {
+                    favoriteRecipes.remove(recipe.id.toString())
+                    isFavorite = false
+                    R.drawable.ic_heart_empty
+                } else {
+                    favoriteRecipes.add(recipe.id.toString())
+                    isFavorite = true
+                    R.drawable.ic_heart
+                }
+                ibFavorites.setImageResource(newDrawableId)
+                saveFavorites(favoriteRecipes)
             }
         }
     }
@@ -117,8 +136,31 @@ class RecipeFragment : Fragment() {
         }
     }
 
+    private fun saveFavorites(recipesId: Set<String>) {
+        val context = binding.root.context
+        val sharedPrefs = context.getSharedPreferences(FAVORITES_FILE_KEY, Context.MODE_PRIVATE)
+
+        with(sharedPrefs.edit()) {
+            putStringSet(RECIPES_ID_KEY, recipesId)
+            apply()
+        }
+    }
+
+    private fun getFavorites(): MutableSet<String> {
+        val context = binding.root.context
+        val sharedPrefs = context.getSharedPreferences(FAVORITES_FILE_KEY, Context.MODE_PRIVATE)
+
+        val recipesId = sharedPrefs.getStringSet(RECIPES_ID_KEY, mutableSetOf())
+        return HashSet(recipesId)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val FAVORITES_FILE_KEY = "com.example.recipeapp.favorites"
+        const val RECIPES_ID_KEY = "favoriteRecipes"
     }
 }

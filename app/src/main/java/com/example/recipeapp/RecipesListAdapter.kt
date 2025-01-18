@@ -45,7 +45,7 @@ class RecipesListAdapter(private val dataset: List<Recipe>) :
         holder.itemTitle.text = positionData.title
         holder.itemImage.setImageDrawable(drawable)
         holder.itemImage.contentDescription =
-            "${R.string.text_item_recipe_description} ${positionData.title.lowercase()}"
+            "${context.getString(R.string.text_item_recipe_description)} ${positionData.title.lowercase()}"
         holder.itemView.setOnClickListener {
             itemClickListener?.onItemClick(position)
         }
