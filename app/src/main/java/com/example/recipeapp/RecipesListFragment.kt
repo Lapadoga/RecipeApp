@@ -46,7 +46,7 @@ class RecipesListFragment : Fragment() {
 
         binding.ivRecipesHeader.setImageDrawable(drawable)
         binding.ivRecipesHeader.contentDescription =
-            "${R.string.text_item_category_description} $categoryName"
+            "${getString(R.string.text_item_category_description)} $categoryName"
         binding.tvRecipesHeader.text = categoryName
 
         initRecycler()

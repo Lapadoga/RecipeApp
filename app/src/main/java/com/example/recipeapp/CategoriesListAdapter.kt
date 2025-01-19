@@ -51,7 +51,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         viewHolder.itemDescription.text = positionData.description
         viewHolder.itemImage.setImageDrawable(drawable)
         viewHolder.itemImage.contentDescription =
-            "${R.string.text_item_category_description} ${positionData.title.lowercase()}"
+            "${context.getString(R.string.text_item_category_description)} ${positionData.title.lowercase()}"
 
         viewHolder.itemView.setOnClickListener {
             itemClickListener?.onItemClick(position)
