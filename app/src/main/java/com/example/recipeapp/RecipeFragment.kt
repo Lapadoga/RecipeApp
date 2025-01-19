@@ -137,7 +137,7 @@ class RecipeFragment : Fragment() {
     }
 
     private fun saveFavorites(recipesId: Set<String>) {
-        val context = binding.root.context
+        val context = context ?: return
         val sharedPrefs = context.getSharedPreferences(FAVORITES_FILE_KEY, Context.MODE_PRIVATE)
 
         with(sharedPrefs.edit()) {
@@ -147,7 +147,7 @@ class RecipeFragment : Fragment() {
     }
 
     private fun getFavorites(): MutableSet<String> {
-        val context = binding.root.context
+        val context = context ?: return mutableSetOf()
         val sharedPrefs = context.getSharedPreferences(FAVORITES_FILE_KEY, Context.MODE_PRIVATE)
 
         val recipesId = sharedPrefs.getStringSet(RECIPES_ID_KEY, mutableSetOf())
