@@ -1,6 +1,5 @@
 package com.example.recipeapp
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.example.recipeapp.RecipeFragment.Companion.FAVORITES_FILE_KEY
-import com.example.recipeapp.RecipeFragment.Companion.RECIPES_ID_KEY
 import com.example.recipeapp.RecipesListFragment.Companion.RECIPE_KEY
 import com.example.recipeapp.databinding.FragmentFavoritesBinding
 
@@ -39,7 +36,7 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        val favoriteRecipes = getFavorites()
+        val favoriteRecipes = HashSet(PreferencesUtils.getFavorites(context).map { it.toInt() })
         val dataSet = STUB.getRecipesByIds(favoriteRecipes)
         val adapter = RecipesListAdapter(dataSet)
         adapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
@@ -51,7 +48,7 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun initUI() {
-        val favoriteRecipes = getFavorites()
+        val favoriteRecipes = PreferencesUtils.getFavorites(context)
         if (favoriteRecipes.size == 0) {
             with(binding) {
                 rvFavorites.visibility = View.GONE
@@ -68,13 +65,5 @@ class FavoritesFragment : Fragment() {
             setReorderingAllowed(true)
             addToBackStack(null)
         }
-    }
-
-    private fun getFavorites(): MutableSet<Int> {
-        val context = context ?: return mutableSetOf()
-        val sharedPrefs = context.getSharedPreferences(FAVORITES_FILE_KEY, Context.MODE_PRIVATE)
-
-        val recipesId = sharedPrefs.getStringSet(RECIPES_ID_KEY, mutableSetOf())
-        return HashSet(recipesId?.map { it.toInt() })
     }
 }

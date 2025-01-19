@@ -56,7 +56,7 @@ class RecipeFragment : Fragment() {
             ivRecipe.contentDescription =
                 "${getString(R.string.text_item_category_description)} ${recipe.title.lowercase()}"
 
-            val favoriteRecipes = getFavorites()
+            val favoriteRecipes = PreferencesUtils.getFavorites(context)
             val drawableId =
                 if (favoriteRecipes.contains(recipe.id.toString())) {
                     isFavorite = true
@@ -68,7 +68,7 @@ class RecipeFragment : Fragment() {
             ibFavorites.setImageResource(drawableId)
             ibFavorites.contentDescription = getString(R.string.text_favorites)
             ibFavorites.setOnClickListener {
-                val favoriteRecipes = getFavorites()
+                val favoriteRecipes = PreferencesUtils.getFavorites(context)
                 val newDrawableId = if (isFavorite) {
                     favoriteRecipes.remove(recipe.id.toString())
                     isFavorite = false
@@ -144,14 +144,6 @@ class RecipeFragment : Fragment() {
             putStringSet(RECIPES_ID_KEY, recipesId)
             apply()
         }
-    }
-
-    private fun getFavorites(): MutableSet<String> {
-        val context = context ?: return mutableSetOf()
-        val sharedPrefs = context.getSharedPreferences(FAVORITES_FILE_KEY, Context.MODE_PRIVATE)
-
-        val recipesId = sharedPrefs.getStringSet(RECIPES_ID_KEY, mutableSetOf())
-        return HashSet(recipesId)
     }
 
     override fun onDestroyView() {
