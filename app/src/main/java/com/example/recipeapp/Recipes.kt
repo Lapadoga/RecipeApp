@@ -5,6 +5,7 @@ object STUB {
     fun getRecipesByCategoryId(categoryId: Int?): List<Recipe> =
         if (categoryId == 0) burgerRecipes else listOf()
     fun getRecipeById(recipeId: Int): Recipe? = burgerRecipes.find { recipeId == it.id }
+    fun getRecipesByIds(recipeIds: Set<Int>): List<Recipe> = burgerRecipes.filter { recipeIds.contains(it.id) }
 
     private val categories: List<Category> = listOf(
         Category(0, "Бургеры", "Рецепты всех популярных видов бургеров", "burger.png"),
