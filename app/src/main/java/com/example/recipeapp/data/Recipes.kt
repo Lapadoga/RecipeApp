@@ -1,4 +1,4 @@
-package com.example.recipeapp
+package com.example.recipeapp.data
 
 object STUB {
     fun getCategories(): List<Category> = categories

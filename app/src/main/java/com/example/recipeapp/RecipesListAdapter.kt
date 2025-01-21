@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeapp.databinding.ItemRecipeBinding
+import com.example.recipeapp.data.Recipe
 import java.io.IOException
 
 class RecipesListAdapter(private val dataset: List<Recipe>) :

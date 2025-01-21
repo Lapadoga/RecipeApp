@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.example.recipeapp.databinding.FragmentRecipeBinding
+import com.example.recipeapp.data.Ingredient
+import com.example.recipeapp.data.Recipe
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.io.IOException
 

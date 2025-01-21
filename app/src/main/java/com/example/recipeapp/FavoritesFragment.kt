@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.example.recipeapp.RecipesListFragment.Companion.RECIPE_KEY
+import com.example.recipeapp.data.STUB
 import com.example.recipeapp.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment() {

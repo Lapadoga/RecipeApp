@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.example.recipeapp.data.STUB
 import com.example.recipeapp.databinding.FragmentListRecipesBinding
 import java.io.IOException
 

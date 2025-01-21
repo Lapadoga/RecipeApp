@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeapp.databinding.ItemIngredientBinding
+import com.example.recipeapp.data.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 

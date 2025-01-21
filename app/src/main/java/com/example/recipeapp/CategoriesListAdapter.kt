@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeapp.databinding.ItemCategoryBinding
+import com.example.recipeapp.data.Category
 import java.io.IOException
 
 
