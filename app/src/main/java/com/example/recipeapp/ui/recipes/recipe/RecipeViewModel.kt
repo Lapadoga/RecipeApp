@@ -1,14 +1,12 @@
 package com.example.recipeapp.ui.recipes.recipe
 
 import androidx.lifecycle.ViewModel
-import com.example.recipeapp.data.Ingredient
+import com.example.recipeapp.model.Recipe
 
 data class RecipeState(
-    var isFavorite: Boolean? = null,
-    val title: String? = null,
-    var portionSize: Int = 1,
-    val ingredients: List<Ingredient> = mutableListOf(),
-    val method: List<String> = mutableListOf(),
+    val isFavorite: Boolean = false,
+    val portionSize: Int = 1,
+    val recipe: Recipe? = null,
 )
 
 class RecipeViewModel : ViewModel() {

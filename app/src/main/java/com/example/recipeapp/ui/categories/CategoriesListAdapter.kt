@@ -1,4 +1,4 @@
-package com.example.recipeapp
+package com.example.recipeapp.ui.categories
 
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.recipeapp.R
 import com.example.recipeapp.databinding.ItemCategoryBinding
-import com.example.recipeapp.data.Category
+import com.example.recipeapp.model.Category
 import java.io.IOException
 
 

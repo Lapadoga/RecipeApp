@@ -1,4 +1,4 @@
-package com.example.recipeapp
+package com.example.recipeapp.ui.recipes.recipesList
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -9,8 +9,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.example.recipeapp.R
 import com.example.recipeapp.data.STUB
 import com.example.recipeapp.databinding.FragmentListRecipesBinding
+import com.example.recipeapp.ui.categories.CategoriesListFragment
+import com.example.recipeapp.ui.recipes.recipe.RecipeFragment
 import java.io.IOException
 
 class RecipesListFragment : Fragment() {
