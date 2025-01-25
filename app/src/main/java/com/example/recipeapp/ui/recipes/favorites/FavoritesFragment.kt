@@ -1,4 +1,4 @@
-package com.example.recipeapp
+package com.example.recipeapp.ui.recipes.favorites
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,13 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.example.recipeapp.RecipesListFragment.Companion.RECIPE_KEY
+import com.example.recipeapp.utils.PreferencesUtils
+import com.example.recipeapp.R
+import com.example.recipeapp.ui.recipes.recipesList.RecipesListFragment.Companion.RECIPE_KEY
+import com.example.recipeapp.data.STUB
 import com.example.recipeapp.databinding.FragmentFavoritesBinding
+import com.example.recipeapp.ui.recipes.recipe.RecipeFragment
+import com.example.recipeapp.ui.recipes.recipesList.RecipesListAdapter
 
 class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null

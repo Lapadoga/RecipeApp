@@ -1,8 +1,8 @@
-package com.example.recipeapp
+package com.example.recipeapp.utils
 
 import android.content.Context
-import com.example.recipeapp.RecipeFragment.Companion.FAVORITES_FILE_KEY
-import com.example.recipeapp.RecipeFragment.Companion.RECIPES_ID_KEY
+import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.FAVORITES_FILE_KEY
+import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.RECIPES_ID_KEY
 
 object PreferencesUtils {
     fun getFavorites(context: Context?): MutableSet<String> {
