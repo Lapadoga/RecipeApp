@@ -1,4 +1,4 @@
-package com.example.recipeapp.utils
+package com.example.recipeapp.ui.recipes
 
 import android.content.Context
 import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.FAVORITES_FILE_KEY
