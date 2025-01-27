@@ -8,7 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.example.recipeapp.utils.PreferencesUtils
+import com.example.recipeapp.ui.recipes.PreferencesUtils
 import com.example.recipeapp.R
 import com.example.recipeapp.ui.recipes.recipesList.RecipesListFragment.Companion.RECIPE_KEY
 import com.example.recipeapp.data.STUB

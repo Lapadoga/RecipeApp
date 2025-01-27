@@ -4,12 +4,15 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
-import com.example.recipeapp.utils.PreferencesUtils
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import com.example.recipeapp.ui.recipes.PreferencesUtils
 import com.example.recipeapp.R
 import com.example.recipeapp.databinding.FragmentRecipeBinding
 import com.example.recipeapp.model.Ingredient
@@ -23,6 +26,7 @@ class RecipeFragment : Fragment() {
     private val binding
         get() = _binding ?: throw IllegalStateException("Binding for RecipeFragment is null")
     private var isFavorite = false
+    private val viewModel: RecipeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +49,12 @@ class RecipeFragment : Fragment() {
             initUI(recipe, context)
             initRecycler(recipe.ingredients, recipe.method)
         }
+
+        val observer = Observer<RecipeViewModel.RecipeState> { currentState ->
+            Log.i("!!!", currentState.isFavorite.toString())
+        }
+
+        viewModel.currentRecipe.observe(viewLifecycleOwner, observer)
     }
 
     private fun initUI(recipe: Recipe, context: Context) {
