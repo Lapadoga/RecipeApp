@@ -1,22 +1,16 @@
 package com.example.recipeapp.ui.recipes.recipe
 
-import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import com.example.recipeapp.ui.recipes.PreferencesUtils
 import com.example.recipeapp.R
 import com.example.recipeapp.databinding.FragmentRecipeBinding
 import com.example.recipeapp.model.Ingredient
-import com.example.recipeapp.model.Recipe
 import com.example.recipeapp.ui.recipes.recipesList.RecipesListFragment
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.io.IOException
@@ -33,68 +27,53 @@ class RecipeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val recipeId = arguments?.getInt(RecipesListFragment.RECIPE_KEY)
+
+        recipeId?.let {
+            viewModel.loadRecipe(recipeId)
+        }
+
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            arguments?.getParcelable(RecipesListFragment.RECIPE_KEY, Recipe::class.java)
-        else
-            arguments?.getParcelable(RecipesListFragment.RECIPE_KEY)
-
-        recipe?.let {
-            val context = view.context
-
-            initUI(recipe, context)
-            initRecycler(recipe.ingredients, recipe.method)
-        }
-
-        val observer = Observer<RecipeViewModel.RecipeState> { currentState ->
-            Log.i("!!!", currentState.isFavorite.toString())
-        }
-
-        viewModel.currentRecipe.observe(viewLifecycleOwner, observer)
+        initUI()
+        //initRecycler()
     }
 
-    private fun initUI(recipe: Recipe, context: Context) {
-        val drawable = try {
-            val stream = context.assets?.open(recipe.imageUrl)
-            Drawable.createFromStream(stream, null)
-        } catch (e: IOException) {
-            null
-        }
-
-        with(binding) {
-            tvRecipeTitle.text = recipe.title
-            ivRecipe.setImageDrawable(drawable)
-            ivRecipe.contentDescription =
-                "${getString(R.string.text_item_category_description)} ${recipe.title.lowercase()}"
-
-            val favoriteRecipes = PreferencesUtils.getFavorites(context)
-            val drawableId =
-                if (favoriteRecipes.contains(recipe.id.toString())) {
-                    isFavorite = true
-                    R.drawable.ic_heart
-                } else {
-                    isFavorite = false
-                    R.drawable.ic_heart_empty
+    private fun initUI() {
+        viewModel.currentRecipe.observe(viewLifecycleOwner) { currentState ->
+            currentState.recipe?.let {
+                val recipe = currentState.recipe
+                val drawable = try {
+                    val stream = view?.context?.assets?.open(recipe.imageUrl)
+                    Drawable.createFromStream(stream, null)
+                } catch (e: IOException) {
+                    null
                 }
-            ibFavorites.setImageResource(drawableId)
-            ibFavorites.contentDescription = getString(R.string.text_favorites)
-            ibFavorites.setOnClickListener {
-                val favoriteRecipes = PreferencesUtils.getFavorites(context)
-                val newDrawableId = if (isFavorite) {
-                    favoriteRecipes.remove(recipe.id.toString())
-                    isFavorite = false
-                    R.drawable.ic_heart_empty
-                } else {
-                    favoriteRecipes.add(recipe.id.toString())
-                    isFavorite = true
-                    R.drawable.ic_heart
+
+                with(binding) {
+                    tvRecipeTitle.text = recipe.title
+                    ivRecipe.setImageDrawable(drawable)
+                    ivRecipe.contentDescription =
+                        "${getString(R.string.text_item_category_description)} ${recipe.title.lowercase()}"
+
+                    val drawableId =
+                        if (currentState.isFavorite) {
+                            isFavorite = true
+                            R.drawable.ic_heart
+                        } else {
+                            isFavorite = false
+                            R.drawable.ic_heart_empty
+                        }
+                    ibFavorites.setImageResource(drawableId)
+                    ibFavorites.contentDescription = getString(R.string.text_favorites)
+
+                    ibFavorites.setOnClickListener {
+                        viewModel.onFavoritesClicked()
+                    }
                 }
-                ibFavorites.setImageResource(newDrawableId)
-                saveFavorites(favoriteRecipes)
             }
         }
     }
@@ -148,16 +127,6 @@ class RecipeFragment : Fragment() {
                 }
             })
             sbPortions.progress = 1
-        }
-    }
-
-    private fun saveFavorites(recipesId: Set<String>) {
-        val context = context ?: return
-        val sharedPrefs = context.getSharedPreferences(FAVORITES_FILE_KEY, Context.MODE_PRIVATE)
-
-        with(sharedPrefs.edit()) {
-            putStringSet(RECIPES_ID_KEY, recipesId)
-            apply()
         }
     }
 
