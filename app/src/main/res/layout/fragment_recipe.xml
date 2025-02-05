@@ -29,6 +29,7 @@
                 android:layout_marginTop="@dimen/dimen_main"
                 android:layout_marginEnd="@dimen/dimen_main"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/text_favorites"
                 android:foreground="?attr/selectableItemBackground"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"

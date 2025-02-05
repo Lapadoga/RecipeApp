@@ -1,22 +1,15 @@
 package com.example.recipeapp.ui.recipes.recipe
 
-import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import com.example.recipeapp.ui.recipes.PreferencesUtils
 import com.example.recipeapp.R
 import com.example.recipeapp.databinding.FragmentRecipeBinding
-import com.example.recipeapp.model.Ingredient
-import com.example.recipeapp.model.Recipe
 import com.example.recipeapp.ui.recipes.recipesList.RecipesListFragment
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.io.IOException
@@ -27,79 +20,102 @@ class RecipeFragment : Fragment() {
         get() = _binding ?: throw IllegalStateException("Binding for RecipeFragment is null")
     private var isFavorite = false
     private val viewModel: RecipeViewModel by activityViewModels()
+    private val methodAdapter: MethodAdapter = MethodAdapter(listOf())
+    private val ingredientsAdapter: IngredientsAdapter = IngredientsAdapter(listOf())
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val recipeId = arguments?.getInt(RecipesListFragment.RECIPE_KEY)
+
+        recipeId?.let {
+            viewModel.loadRecipe(recipeId)
+        }
+
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            arguments?.getParcelable(RecipesListFragment.RECIPE_KEY, Recipe::class.java)
-        else
-            arguments?.getParcelable(RecipesListFragment.RECIPE_KEY)
-
-        recipe?.let {
-            val context = view.context
-
-            initUI(recipe, context)
-            initRecycler(recipe.ingredients, recipe.method)
-        }
-
-        val observer = Observer<RecipeViewModel.RecipeState> { currentState ->
-            Log.i("!!!", currentState.isFavorite.toString())
-        }
-
-        viewModel.currentRecipe.observe(viewLifecycleOwner, observer)
+        initUI()
+        initRecycler()
     }
 
-    private fun initUI(recipe: Recipe, context: Context) {
-        val drawable = try {
-            val stream = context.assets?.open(recipe.imageUrl)
-            Drawable.createFromStream(stream, null)
-        } catch (e: IOException) {
-            null
-        }
-
+    private fun initUI() {
         with(binding) {
-            tvRecipeTitle.text = recipe.title
-            ivRecipe.setImageDrawable(drawable)
-            ivRecipe.contentDescription =
-                "${getString(R.string.text_item_category_description)} ${recipe.title.lowercase()}"
+            viewModel.currentRecipe.observe(viewLifecycleOwner) { currentState ->
+                currentState.recipe?.let {
+                    val recipe = currentState.recipe
+                    val drawable = try {
+                        val stream = view?.context?.assets?.open(recipe.imageUrl)
+                        Drawable.createFromStream(stream, null)
+                    } catch (e: IOException) {
+                        null
+                    }
 
-            val favoriteRecipes = PreferencesUtils.getFavorites(context)
-            val drawableId =
-                if (favoriteRecipes.contains(recipe.id.toString())) {
-                    isFavorite = true
-                    R.drawable.ic_heart
-                } else {
-                    isFavorite = false
-                    R.drawable.ic_heart_empty
+                    tvRecipeTitle.text = recipe.title
+                    ivRecipe.setImageDrawable(drawable)
+                    ivRecipe.contentDescription =
+                        "${getString(R.string.text_item_category_description)} ${recipe.title.lowercase()}"
+
+                    val drawableId =
+                        if (currentState.isFavorite) {
+                            isFavorite = true
+                            R.drawable.ic_heart
+                        } else {
+                            isFavorite = false
+                            R.drawable.ic_heart_empty
+                        }
+                    ibFavorites.setImageResource(drawableId)
                 }
-            ibFavorites.setImageResource(drawableId)
-            ibFavorites.contentDescription = getString(R.string.text_favorites)
+            }
             ibFavorites.setOnClickListener {
-                val favoriteRecipes = PreferencesUtils.getFavorites(context)
-                val newDrawableId = if (isFavorite) {
-                    favoriteRecipes.remove(recipe.id.toString())
-                    isFavorite = false
-                    R.drawable.ic_heart_empty
-                } else {
-                    favoriteRecipes.add(recipe.id.toString())
-                    isFavorite = true
-                    R.drawable.ic_heart
-                }
-                ibFavorites.setImageResource(newDrawableId)
-                saveFavorites(favoriteRecipes)
+                viewModel.onFavoritesClicked()
             }
         }
     }
 
-    private fun initRecycler(ingredients: List<Ingredient>, method: List<String>) {
+    private fun initRecycler() {
+        addRecyclerDecorations()
+        with(binding) {
+            rvMethod.adapter = methodAdapter
+            rvIngredients.adapter = ingredientsAdapter
+
+            sbPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                    viewModel.onSeekBarChange(p1)
+                }
+
+                override fun onStartTrackingTouch(p0: SeekBar?) {
+                    return
+                }
+
+                override fun onStopTrackingTouch(p0: SeekBar?) {
+                    return
+                }
+            })
+
+            viewModel.currentRecipe.observe(viewLifecycleOwner) { currentState ->
+                currentState.recipe?.let {
+                    ingredientsAdapter.setDataSet(currentState.recipe.ingredients)
+                    methodAdapter.setDataSet(currentState.recipe.method)
+                    sbPortions.progress = currentState.portionSize
+                    portionSize.text = "${currentState.portionSize}"
+                    ingredientsAdapter.updateIngredients(currentState.portionSize)
+                    ingredientsAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun addRecyclerDecorations() {
         with(binding) {
             val dividerInset =
                 rvIngredients.context.resources.getDimension(R.dimen.dimen_item_rv_recipe).toInt()
@@ -115,8 +131,6 @@ class RecipeFragment : Fragment() {
             )
             ingredientsDividerDecoration.dividerInsetStart = dividerInset
             ingredientsDividerDecoration.dividerInsetEnd = dividerInset
-            val ingredientsAdapter = IngredientsAdapter(ingredients)
-            rvIngredients.adapter = ingredientsAdapter
             rvIngredients.addItemDecoration(ingredientsDividerDecoration)
 
             val methodDividerDecoration = MaterialDividerItemDecoration(
@@ -127,43 +141,8 @@ class RecipeFragment : Fragment() {
             methodDividerDecoration.setDividerColorResource(rvMethod.context, R.color.rv_divider)
             methodDividerDecoration.dividerInsetStart = dividerInset
             methodDividerDecoration.dividerInsetEnd = dividerInset
-            val methodAdapter = MethodAdapter(method)
-            rvMethod.adapter = methodAdapter
             rvMethod.addItemDecoration(methodDividerDecoration)
-
-
-            sbPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                    portionSize.text = "$p1"
-                    ingredientsAdapter.updateIngredients(p1)
-                    ingredientsAdapter.notifyDataSetChanged()
-                }
-
-                override fun onStartTrackingTouch(p0: SeekBar?) {
-                    return
-                }
-
-                override fun onStopTrackingTouch(p0: SeekBar?) {
-                    return
-                }
-            })
-            sbPortions.progress = 1
         }
-    }
-
-    private fun saveFavorites(recipesId: Set<String>) {
-        val context = context ?: return
-        val sharedPrefs = context.getSharedPreferences(FAVORITES_FILE_KEY, Context.MODE_PRIVATE)
-
-        with(sharedPrefs.edit()) {
-            putStringSet(RECIPES_ID_KEY, recipesId)
-            apply()
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

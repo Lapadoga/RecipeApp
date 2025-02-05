@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipeapp.databinding.ItemMethodBinding
 
-class MethodAdapter(private val dataSet: List<String>) :
+class MethodAdapter(private var dataSet: List<String>) :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
     class ViewHolder(binding: ItemMethodBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -25,4 +25,7 @@ class MethodAdapter(private val dataSet: List<String>) :
         holder.methodText.text = "${position + 1}. $positionData"
     }
 
+    fun setDataSet(newDataSet: List<String>) {
+        dataSet = newDataSet
+    }
 }
