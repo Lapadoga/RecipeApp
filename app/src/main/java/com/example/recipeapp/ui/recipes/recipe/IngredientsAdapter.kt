@@ -8,7 +8,7 @@ import com.example.recipeapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private val dataSet: List<Ingredient>) :
+class IngredientsAdapter(private var dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
     private var quantity: Int = 1
@@ -34,6 +34,10 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
             quantity.setScale(1, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString()
         holder.ingredientAmount.text =
             "$displayQuantity ${positionData.unitOfMeasure}"
+    }
+
+    fun setDataSet(newDataSet: List<Ingredient>) {
+        dataSet = newDataSet
     }
 
     fun updateIngredients(progress: Int) {

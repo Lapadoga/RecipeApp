@@ -51,6 +51,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         saveFavorites(favoriteRecipes)
     }
 
+    fun onSeekBarChange(newPortionSize: Int) {
+        mutableCurrentRecipe.value = mutableCurrentRecipe.value?.copy(portionSize = newPortionSize)
+    }
+
     private fun getFavorites(): MutableSet<String> {
         val sharedPrefs = getApplication<Application>().getSharedPreferences(
             FAVORITES_FILE_KEY,
