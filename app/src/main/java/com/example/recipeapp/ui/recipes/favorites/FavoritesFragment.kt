@@ -8,13 +8,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.example.recipeapp.ui.recipes.PreferencesUtils
 import com.example.recipeapp.R
-import com.example.recipeapp.ui.recipes.recipesList.RecipesListFragment.Companion.RECIPE_KEY
 import com.example.recipeapp.data.STUB
 import com.example.recipeapp.databinding.FragmentFavoritesBinding
 import com.example.recipeapp.ui.recipes.recipe.RecipeFragment
 import com.example.recipeapp.ui.recipes.recipesList.RecipesListAdapter
+import com.example.recipeapp.ui.recipes.recipesList.RecipesListFragment.Companion.RECIPE_KEY
 
 class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
