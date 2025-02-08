@@ -74,8 +74,7 @@ class RecipesListFragment : Fragment() {
 
     private fun openRecipeByRecipeId(recipeId: Int) {
         parentFragmentManager.commit {
-            val recipe = STUB.getRecipeById(recipeId)
-            val bundle = bundleOf(RECIPE_KEY to recipe)
+            val bundle = bundleOf(RECIPE_KEY to recipeId)
             replace<RecipeFragment>(R.id.mainContainer, args = bundle)
             setReorderingAllowed(true)
             addToBackStack(null)
@@ -83,6 +82,6 @@ class RecipesListFragment : Fragment() {
     }
 
     companion object {
-        const val RECIPE_KEY = "ARG_RECIPE"
+        const val RECIPE_KEY = "RECIPE_ID"
     }
 }
