@@ -3,6 +3,7 @@ package com.example.recipeapp.ui.recipes.recipe
 import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -38,6 +39,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                 val stream = getApplication<Application>().assets.open(recipe.imageUrl)
                 Drawable.createFromStream(stream, null)
             } catch (e: IOException) {
+                Log.e("Drawable", e.stackTraceToString())
                 null
             }
         val favoriteRecipes = getFavorites()
