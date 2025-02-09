@@ -1,6 +1,5 @@
 package com.example.recipeapp.ui.recipes.recipe
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import com.example.recipeapp.R
 import com.example.recipeapp.databinding.FragmentRecipeBinding
 import com.example.recipeapp.ui.recipes.recipesList.RecipesListFragment
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import java.io.IOException
 
 class RecipeFragment : Fragment() {
     private var _binding: FragmentRecipeBinding? = null
@@ -48,15 +46,9 @@ class RecipeFragment : Fragment() {
             viewModel.currentRecipe.observe(viewLifecycleOwner) { currentState ->
                 currentState.recipe?.let {
                     val recipe = currentState.recipe
-                    val drawable = try {
-                        val stream = view?.context?.assets?.open(recipe.imageUrl)
-                        Drawable.createFromStream(stream, null)
-                    } catch (e: IOException) {
-                        null
-                    }
 
                     tvRecipeTitle.text = recipe.title
-                    ivRecipe.setImageDrawable(drawable)
+                    ivRecipe.setImageDrawable(currentState.recipeImage)
                     ivRecipe.contentDescription =
                         "${getString(R.string.text_item_category_description)} ${recipe.title.lowercase()}"
 
@@ -69,6 +61,13 @@ class RecipeFragment : Fragment() {
                             R.drawable.ic_heart_empty
                         }
                     ibFavorites.setImageResource(drawableId)
+
+                    ingredientsAdapter.setDataSet(currentState.recipe.ingredients)
+                    methodAdapter.setDataSet(currentState.recipe.method)
+                    sbPortions.progress = currentState.portionSize
+                    portionSize.text = "${currentState.portionSize}"
+                    ingredientsAdapter.updateIngredients(currentState.portionSize)
+                    ingredientsAdapter.notifyDataSetChanged()
                 }
             }
             ibFavorites.setOnClickListener {
@@ -96,17 +95,6 @@ class RecipeFragment : Fragment() {
                     return
                 }
             })
-
-            viewModel.currentRecipe.observe(viewLifecycleOwner) { currentState ->
-                currentState.recipe?.let {
-                    ingredientsAdapter.setDataSet(currentState.recipe.ingredients)
-                    methodAdapter.setDataSet(currentState.recipe.method)
-                    sbPortions.progress = currentState.portionSize
-                    portionSize.text = "${currentState.portionSize}"
-                    ingredientsAdapter.updateIngredients(currentState.portionSize)
-                    ingredientsAdapter.notifyDataSetChanged()
-                }
-            }
         }
     }
 
