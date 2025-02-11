@@ -38,11 +38,28 @@ class RecipeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initUI()
-        initRecycler()
     }
 
     private fun initUI() {
+        addRecyclerDecorations()
         with(binding) {
+            rvMethod.adapter = methodAdapter
+            rvIngredients.adapter = ingredientsAdapter
+
+            sbPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                    viewModel.onSeekBarChange(p1)
+                }
+
+                override fun onStartTrackingTouch(p0: SeekBar?) {
+                    return
+                }
+
+                override fun onStopTrackingTouch(p0: SeekBar?) {
+                    return
+                }
+            })
+
             viewModel.currentRecipe.observe(viewLifecycleOwner) { currentState ->
                 currentState.recipe?.let {
                     val recipe = currentState.recipe
@@ -73,28 +90,6 @@ class RecipeFragment : Fragment() {
             ibFavorites.setOnClickListener {
                 viewModel.onFavoritesClicked()
             }
-        }
-    }
-
-    private fun initRecycler() {
-        addRecyclerDecorations()
-        with(binding) {
-            rvMethod.adapter = methodAdapter
-            rvIngredients.adapter = ingredientsAdapter
-
-            sbPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                    viewModel.onSeekBarChange(p1)
-                }
-
-                override fun onStartTrackingTouch(p0: SeekBar?) {
-                    return
-                }
-
-                override fun onStopTrackingTouch(p0: SeekBar?) {
-                    return
-                }
-            })
         }
     }
 
