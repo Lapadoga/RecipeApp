@@ -22,6 +22,12 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         val recipeImage: Drawable? = null,
     )
 
+    private val sharedPreferences by lazy {
+        application.getSharedPreferences(
+            FAVORITES_FILE_KEY,
+            Context.MODE_PRIVATE
+        )
+    }
     private val mutableCurrentRecipe = MutableLiveData(RecipeState())
     val currentRecipe: LiveData<RecipeState> get() = mutableCurrentRecipe
 
@@ -72,22 +78,12 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     }
 
     private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = application.getSharedPreferences(
-            FAVORITES_FILE_KEY,
-            Context.MODE_PRIVATE
-        )
-
-        val recipesId = sharedPrefs.getStringSet(RECIPES_ID_KEY, mutableSetOf())
+        val recipesId = sharedPreferences.getStringSet(RECIPES_ID_KEY, mutableSetOf())
         return HashSet(recipesId)
     }
 
     private fun saveFavorites(recipesId: Set<String>) {
-        val sharedPrefs = application.getSharedPreferences(
-            FAVORITES_FILE_KEY,
-            Context.MODE_PRIVATE
-        )
-
-        with(sharedPrefs.edit()) {
+        with(sharedPreferences.edit()) {
             putStringSet(RECIPES_ID_KEY, recipesId)
             apply()
         }
