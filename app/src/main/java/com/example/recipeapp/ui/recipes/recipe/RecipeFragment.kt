@@ -46,19 +46,9 @@ class RecipeFragment : Fragment() {
             rvMethod.adapter = methodAdapter
             rvIngredients.adapter = ingredientsAdapter
 
-            sbPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                    viewModel.onSeekBarChange(p1)
-                }
-
-                override fun onStartTrackingTouch(p0: SeekBar?) {
-                    return
-                }
-
-                override fun onStopTrackingTouch(p0: SeekBar?) {
-                    return
-                }
-            })
+            val seekBarChangeListener =
+                PortionSeekBarListener { viewModel.onSeekBarChange(binding.sbPortions.progress) }
+            sbPortions.setOnSeekBarChangeListener(seekBarChangeListener)
 
             viewModel.currentRecipe.observe(viewLifecycleOwner) { currentState ->
                 currentState.recipe?.let {
@@ -131,5 +121,20 @@ class RecipeFragment : Fragment() {
     companion object {
         const val FAVORITES_FILE_KEY = "com.example.recipeapp.favorites"
         const val RECIPES_ID_KEY = "favoriteRecipes"
+    }
+}
+
+private class PortionSeekBarListener(val onChangeIngredients: (Int) -> Unit) :
+    SeekBar.OnSeekBarChangeListener {
+    override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+        onChangeIngredients(p1)
+    }
+
+    override fun onStartTrackingTouch(p0: SeekBar?) {
+        return
+    }
+
+    override fun onStopTrackingTouch(p0: SeekBar?) {
+        return
     }
 }
