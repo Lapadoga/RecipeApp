@@ -13,7 +13,7 @@ import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.FAVORITE
 import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.RECIPES_ID_KEY
 import java.io.IOException
 
-class RecipeViewModel(application: Application) : AndroidViewModel(application) {
+class RecipeViewModel(private val application: Application) : AndroidViewModel(application) {
 
     data class RecipeState(
         val isFavorite: Boolean = false,
@@ -36,7 +36,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val drawable = if (recipe == null) null
         else
             try {
-                val stream = getApplication<Application>().assets.open(recipe.imageUrl)
+                val stream = application.assets.open(recipe.imageUrl)
                 Drawable.createFromStream(stream, null)
             } catch (e: IOException) {
                 Log.e("Drawable", e.stackTraceToString())
@@ -72,7 +72,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = getApplication<Application>().getSharedPreferences(
+        val sharedPrefs = application.getSharedPreferences(
             FAVORITES_FILE_KEY,
             Context.MODE_PRIVATE
         )
@@ -82,7 +82,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun saveFavorites(recipesId: Set<String>) {
-        val sharedPrefs = getApplication<Application>().getSharedPreferences(
+        val sharedPrefs = application.getSharedPreferences(
             FAVORITES_FILE_KEY,
             Context.MODE_PRIVATE
         )
