@@ -13,7 +13,7 @@ import com.example.recipeapp.model.Category
 import java.io.IOException
 
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
+class CategoriesListAdapter(private var dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
     private var itemClickListener: OnItemClickListener? = null
@@ -61,4 +61,8 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     }
 
     override fun getItemCount() = dataSet.size
+
+    fun setDataSet(newDataSet: List<Category>) {
+        dataSet = newDataSet
+    }
 }
