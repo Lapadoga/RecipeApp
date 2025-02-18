@@ -21,10 +21,6 @@ class RecipesListViewModel(private val application: Application) : AndroidViewMo
     private val mutableCurrentRecipes = MutableLiveData(RecipesListState())
     val currentRecipes: LiveData<RecipesListState> get() = mutableCurrentRecipes
 
-    init {
-        mutableCurrentRecipes.value = RecipesListState()
-    }
-
     fun loadCategory(categoryId: Int) {
         // TODO: load from network
 

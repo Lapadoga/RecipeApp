@@ -19,10 +19,6 @@ class FavoritesViewModel(private val application: Application) : AndroidViewMode
     private var mutableCurrentFavoriteRecipes = MutableLiveData(FavoriteRecipesState())
     val currentFavoriteRecipes: LiveData<FavoriteRecipesState> get() = mutableCurrentFavoriteRecipes
 
-    init {
-        mutableCurrentFavoriteRecipes.value = FavoriteRecipesState()
-    }
-
     fun loadFavoriteRecipes() {
         // TODO: load from network
 

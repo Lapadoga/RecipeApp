@@ -38,21 +38,21 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun initUI() {
-        val value = viewModel.currentRecipes.value
-        value?.let {
-            recipesAdapter.setOnItemClickListener(object : RecipesListAdapter.OnItemClickListener {
+        with(binding) {
+            viewModel.currentRecipes.observe(viewLifecycleOwner) { currentState ->
+                recipesAdapter.setDataSet(currentState.recipes)
+                ivRecipesHeader.setImageDrawable(currentState.categoryImage)
+                ivRecipesHeader.contentDescription =
+                    "${getString(R.string.text_item_category_description)} ${currentState.categoryTitle}"
+                tvRecipesHeader.text = currentState.categoryTitle
+            }
+            recipesAdapter.setOnItemClickListener(object :
+                RecipesListAdapter.OnItemClickListener {
                 override fun onItemClick(recipeId: Int) {
                     openRecipeByRecipeId(recipeId)
                 }
             })
-            with(binding) {
-                ivRecipesHeader.setImageDrawable(it.categoryImage)
-                ivRecipesHeader.contentDescription =
-                    "${getString(R.string.text_item_category_description)} ${it.categoryTitle}"
-                tvRecipesHeader.text = it.categoryTitle
-                rvRecipes.adapter = recipesAdapter
-            }
-            recipesAdapter.setDataSet(it.recipes)
+            rvRecipes.adapter = recipesAdapter
         }
     }
 

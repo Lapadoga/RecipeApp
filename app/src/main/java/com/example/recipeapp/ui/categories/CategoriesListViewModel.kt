@@ -16,10 +16,6 @@ class CategoriesListViewModel(private val application: Application) : AndroidVie
     private val mutableCurrentCategories = MutableLiveData(CategoriesListState())
     val currentCategories: LiveData<CategoriesListState> get() = mutableCurrentCategories
 
-    init {
-        mutableCurrentCategories.value = CategoriesListState()
-    }
-
     fun loadCategories() {
         // TODO: load from network
 

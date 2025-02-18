@@ -43,7 +43,9 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        viewModel.currentCategories.value?.let { categoriesAdapter.setDataSet(it.categories) }
+        viewModel.currentCategories.observe(viewLifecycleOwner) { currentState ->
+            categoriesAdapter.setDataSet(currentState.categories)
+        }
         with(binding) {
             rvCategories.adapter = categoriesAdapter
             categoriesAdapter.setOnItemClickListener(object :
@@ -53,7 +55,6 @@ class CategoriesListFragment : Fragment() {
                 }
             })
         }
-        binding.rvCategories.adapter = categoriesAdapter
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
