@@ -6,6 +6,7 @@ import com.example.recipeapp.model.Recipe
 
 object STUB {
     fun getCategories(): List<Category> = categories
+    fun getCategoryById(categoryId: Int) = categories.find { categoryId == it.id }
     fun getRecipesByCategoryId(categoryId: Int?): List<Recipe> =
         if (categoryId == 0) burgerRecipes else listOf()
     fun getRecipeById(recipeId: Int): Recipe? = burgerRecipes.find { recipeId == it.id }

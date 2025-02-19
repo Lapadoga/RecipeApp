@@ -31,10 +31,6 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     private val mutableCurrentRecipe = MutableLiveData(RecipeState())
     val currentRecipe: LiveData<RecipeState> get() = mutableCurrentRecipe
 
-    init {
-        mutableCurrentRecipe.value = RecipeState()
-    }
-
     fun loadRecipe(recipeId: Int) {
         // TODO: load from network
 
