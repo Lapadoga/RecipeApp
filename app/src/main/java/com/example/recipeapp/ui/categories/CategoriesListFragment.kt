@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
+import androidx.navigation.fragment.findNavController
 import com.example.recipeapp.R
 import com.example.recipeapp.databinding.FragmentListCategoriesBinding
-import com.example.recipeapp.ui.recipes.recipesList.RecipesListFragment
 
 class CategoriesListFragment : Fragment() {
     private var _binding: FragmentListCategoriesBinding? = null
@@ -61,11 +59,10 @@ class CategoriesListFragment : Fragment() {
         val bundle = bundleOf(
             CATEGORY_ID_KEY to categoryId
         )
-        parentFragmentManager.commit {
-            replace<RecipesListFragment>(R.id.mainContainer, args = bundle)
-            setReorderingAllowed(true)
-            addToBackStack(null)
-        }
+        findNavController().navigate(
+            R.id.action_categoriesListFragment_to_recipesListFragment,
+            bundle
+        )
     }
 
     companion object {
