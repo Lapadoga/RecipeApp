@@ -59,7 +59,10 @@ class CategoriesListFragment : Fragment() {
         val bundle = bundleOf(
             CATEGORY_ID_KEY to categoryId
         )
-        findNavController().navigate(R.id.recipesListFragment, bundle)
+        findNavController().navigate(
+            R.id.action_categoriesListFragment_to_recipesListFragment,
+            bundle
+        )
     }
 
     companion object {

@@ -17,11 +17,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnFavorites.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.favoritesFragment)
+            val navController = findNavController(R.id.nav_host_fragment)
+            if (navController.currentDestination?.id != R.id.favoritesFragment)
+                navController.navigate(R.id.favoritesFragment)
         }
 
         binding.btnCategories.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.categoriesListFragment)
+            val navController = findNavController(R.id.nav_host_fragment)
+            if (navController.currentDestination?.id != R.id.categoriesListFragment)
+                navController.navigate(R.id.categoriesListFragment)
         }
     }
 }
