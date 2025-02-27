@@ -19,13 +19,13 @@ class MainActivity : AppCompatActivity() {
         binding.btnFavorites.setOnClickListener {
             val navController = findNavController(R.id.nav_host_fragment)
             if (navController.currentDestination?.id != R.id.favoritesFragment)
-                navController.navigate(R.id.favoritesFragment)
+                navController.navigate(R.id.action_global_to_favorites)
         }
 
         binding.btnCategories.setOnClickListener {
             val navController = findNavController(R.id.nav_host_fragment)
             if (navController.currentDestination?.id != R.id.categoriesListFragment)
-                navController.navigate(R.id.categoriesListFragment)
+                navController.navigate(R.id.action_global_to_categories)
         }
     }
 }

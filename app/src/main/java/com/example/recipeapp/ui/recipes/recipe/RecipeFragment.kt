@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import com.example.recipeapp.R
 import com.example.recipeapp.databinding.FragmentRecipeBinding
-import com.example.recipeapp.ui.recipes.recipesList.RecipesListFragment
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment() {
@@ -20,17 +20,15 @@ class RecipeFragment : Fragment() {
     private val viewModel: RecipeViewModel by activityViewModels()
     private val methodAdapter: MethodAdapter = MethodAdapter(listOf())
     private val ingredientsAdapter: IngredientsAdapter = IngredientsAdapter(listOf())
+    private val recipeFragmentArgs: RecipeFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val recipeId = arguments?.getInt(RecipesListFragment.RECIPE_KEY)
-
-        recipeId?.let {
-            viewModel.loadRecipe(recipeId)
-        }
+        val recipeId = recipeFragmentArgs.recipeId
+        viewModel.loadRecipe(recipeId)
 
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
         return binding.root
