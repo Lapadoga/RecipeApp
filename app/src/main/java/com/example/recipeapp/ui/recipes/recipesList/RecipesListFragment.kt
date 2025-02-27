@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.recipeapp.R
 import com.example.recipeapp.databinding.FragmentListRecipesBinding
-import com.example.recipeapp.ui.categories.CategoriesListFragment
 
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentListRecipesBinding? = null
@@ -17,6 +17,7 @@ class RecipesListFragment : Fragment() {
         get() = _binding ?: throw IllegalStateException("Binding for RecipesListFragment is null")
     private val viewModel: RecipesListViewModel by activityViewModels()
     private val recipesAdapter: RecipesListAdapter = RecipesListAdapter(listOf())
+    private val recipesListArgs: RecipesListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,8 +25,9 @@ class RecipesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListRecipesBinding.inflate(inflater, container, false)
-        val categoryId = requireArguments().getInt(CategoriesListFragment.CATEGORY_ID_KEY)
-        viewModel.loadCategory(categoryId)
+
+        val category = recipesListArgs.category
+        viewModel.loadCategory(category)
 
         return binding.root
     }
@@ -64,9 +66,5 @@ class RecipesListFragment : Fragment() {
                 recipeId
             )
         )
-    }
-
-    companion object {
-        const val RECIPE_KEY = "RECIPE_ID"
     }
 }
