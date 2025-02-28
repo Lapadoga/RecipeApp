@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.recipeapp.data.STUB
+import com.example.recipeapp.model.Category
 import com.example.recipeapp.model.Recipe
 import java.io.IOException
 
@@ -21,14 +22,12 @@ class RecipesListViewModel(private val application: Application) : AndroidViewMo
     private val mutableCurrentRecipes = MutableLiveData(RecipesListState())
     val currentRecipes: LiveData<RecipesListState> get() = mutableCurrentRecipes
 
-    fun loadCategory(categoryId: Int) {
+    fun loadCategory(category: Category) {
         // TODO: load from network
 
-        val category = STUB.getCategoryById(categoryId)
-        val recipes = STUB.getRecipesByCategoryId(categoryId)
+        val recipes = STUB.getRecipesByCategoryId(category.id)
 
-        val categoryDrawable = if (category == null) null
-        else try {
+        val categoryDrawable = try {
             val stream = application.assets.open(category.imageUrl)
             Drawable.createFromStream(stream, null)
         } catch (e: IOException) {
@@ -37,6 +36,6 @@ class RecipesListViewModel(private val application: Application) : AndroidViewMo
         }
 
         mutableCurrentRecipes.value =
-            RecipesListState(recipes, category?.title ?: "", categoryDrawable)
+            RecipesListState(recipes, category.title, categoryDrawable)
     }
 }
