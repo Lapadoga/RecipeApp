@@ -1,7 +1,6 @@
 package com.example.recipeapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.example.recipeapp.R
@@ -9,8 +8,9 @@ import com.example.recipeapp.databinding.ActivityMainBinding
 import com.example.recipeapp.model.Category
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.net.HttpURLConnection
-import java.net.URL
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
@@ -38,23 +38,31 @@ class MainActivity : AppCompatActivity() {
         }
 
         val thread = Thread {
-            val url = URL("https://recipes.androidsprint.ru/api/category")
-            val connection = url.openConnection() as HttpURLConnection
-            connection.connect()
+            val interceptor = HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+            val client = OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .build()
+            val request = Request.Builder()
+                .url("https://recipes.androidsprint.ru/api/category")
+                .build()
 
-            val body = connection.inputStream.bufferedReader().readText()
-            val categoriesListType = object : TypeToken<List<Category>>() {}.type
-            val categoriesList: List<Category> = Gson().fromJson(body, categoriesListType)
+            val categoriesList: List<Category> = client.newCall(request).execute().use {
+                val categoriesListType = object : TypeToken<List<Category>>() {}.type
+                Gson().fromJson(it.body?.string(), categoriesListType)
+            }
+
             val categoriesIdList: List<Int> = categoriesList.map { it.id }
 
             val recipesJsonData = mutableListOf<String>()
             val tasks = categoriesIdList.map {
                 Callable {
-                    val connectionUrl =
-                        URL("https://recipes.androidsprint.ru/api/category/$it/recipes")
-                    val requestConnection = connectionUrl.openConnection() as HttpURLConnection
+                    val requestConnection = Request.Builder()
+                        .url("https://recipes.androidsprint.ru/api/category/$it/recipes")
+                        .build()
 
-                    requestConnection.inputStream.bufferedReader().readText()
+                    client.newCall(requestConnection).execute().body?.string() ?: ""
                 }
             }
             val futures = threadPool.invokeAll(tasks)
@@ -63,7 +71,6 @@ class MainActivity : AppCompatActivity() {
                 recipesJsonData.add(future.get())
             }
             threadPool.shutdown()
-            Log.i("!!!", recipesJsonData.joinToString("\n"))
         }
         thread.start()
     }
