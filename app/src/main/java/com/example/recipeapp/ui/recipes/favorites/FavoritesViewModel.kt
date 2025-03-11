@@ -43,4 +43,9 @@ class FavoritesViewModel(private val application: Application) : AndroidViewMode
         val data = recipesId?.joinToString(",") ?: ""
         return data
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.shutdownPull()
+    }
 }

@@ -43,4 +43,9 @@ class RecipesListViewModel(private val application: Application) : AndroidViewMo
         else
             mutableCurrentRecipes.value = RecipesListState(data, category.title, categoryDrawable)
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.shutdownPull()
+    }
 }

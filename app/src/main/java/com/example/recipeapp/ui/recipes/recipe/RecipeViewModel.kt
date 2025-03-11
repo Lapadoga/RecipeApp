@@ -91,4 +91,9 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
             apply()
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.shutdownPull()
+    }
 }

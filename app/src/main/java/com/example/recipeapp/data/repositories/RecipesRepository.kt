@@ -99,6 +99,10 @@ class RecipesRepository {
         return result
     }
 
+    fun shutdownPull() {
+        threadPool.shutdown()
+    }
+
     companion object {
         const val RECIPE_API_BASE_URL = "https://recipes.androidsprint.ru/api/"
         const val NUMBER_OF_THREADS = 10

@@ -31,4 +31,9 @@ class CategoriesListViewModel(private val application: Application) :
             mutableCurrentCategories.value = CategoriesListState(data)
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.shutdownPull()
+    }
 }
