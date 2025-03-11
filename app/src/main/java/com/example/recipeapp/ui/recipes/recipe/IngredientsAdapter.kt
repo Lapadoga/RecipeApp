@@ -29,9 +29,13 @@ class IngredientsAdapter(private var dataSet: List<Ingredient>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val positionData = dataSet[position]
         holder.ingredientTitle.text = positionData.description
-        val quantity = BigDecimal(positionData.quantity) * BigDecimal(quantity)
-        val displayQuantity =
-            quantity.setScale(1, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString()
+        var displayQuantity = positionData.quantity
+        val currentQuantity = positionData.quantity.toBigDecimalOrNull()
+        if (currentQuantity != null) {
+            val quantity = BigDecimal(positionData.quantity) * BigDecimal(quantity)
+            displayQuantity =
+                quantity.setScale(1, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString()
+        }
         holder.ingredientAmount.text =
             "$displayQuantity ${positionData.unitOfMeasure}"
     }

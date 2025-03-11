@@ -4,10 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.recipeapp.data.STUB
+import com.example.recipeapp.data.repositories.RecipesRepository
 import com.example.recipeapp.model.Recipe
 import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.FAVORITES_FILE_KEY
 import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.RECIPES_ID_KEY
@@ -22,6 +23,7 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         val recipeImage: Drawable? = null,
     )
 
+    private val repository = RecipesRepository()
     private val sharedPreferences by lazy {
         application.getSharedPreferences(
             FAVORITES_FILE_KEY,
@@ -32,26 +34,31 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
     val currentRecipe: LiveData<RecipeState> get() = mutableCurrentRecipe
 
     fun loadRecipe(recipeId: Int) {
-        // TODO: load from network
+        val recipe = repository.getRecipeById(recipeId)
+        if (recipe == null)
+            Toast.makeText(
+                application.baseContext,
+                RecipesRepository.ERROR_TEXT,
+                Toast.LENGTH_SHORT
+            ).show()
+        else {
+            val drawable =
+                try {
+                    val stream = application.assets.open(recipe.imageUrl)
+                    Drawable.createFromStream(stream, null)
+                } catch (e: IOException) {
+                    Log.e("Drawable", e.stackTraceToString())
+                    null
+                }
+            val favoriteRecipes = getFavorites()
 
-        val recipe = STUB.getRecipeById(recipeId)
-        val drawable = if (recipe == null) null
-        else
-            try {
-                val stream = application.assets.open(recipe.imageUrl)
-                Drawable.createFromStream(stream, null)
-            } catch (e: IOException) {
-                Log.e("Drawable", e.stackTraceToString())
-                null
-            }
-        val favoriteRecipes = getFavorites()
-
-        mutableCurrentRecipe.value = RecipeState(
-            favoriteRecipes.contains(recipeId.toString()),
-            currentRecipe.value?.portionSize ?: 1,
-            recipe,
-            drawable
-        )
+            mutableCurrentRecipe.value = RecipeState(
+                favoriteRecipes.contains(recipeId.toString()),
+                currentRecipe.value?.portionSize ?: 1,
+                recipe,
+                drawable
+            )
+        }
     }
 
     fun onFavoritesClicked() {
