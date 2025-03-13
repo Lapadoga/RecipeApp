@@ -68,6 +68,6 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="category"
-            app:argType="com.example.recipeapp.model.Category" />
+            app:argType="string" />
     </fragment>
 </navigation>

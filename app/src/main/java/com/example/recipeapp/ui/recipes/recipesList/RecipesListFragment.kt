@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.recipeapp.R
 import com.example.recipeapp.databinding.FragmentListRecipesBinding
+import kotlinx.serialization.json.Json
 
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentListRecipesBinding? = null
@@ -26,8 +27,8 @@ class RecipesListFragment : Fragment() {
     ): View {
         _binding = FragmentListRecipesBinding.inflate(inflater, container, false)
 
-        val category = recipesListArgs.category
-        viewModel.loadCategory(category)
+        val categoryJson = recipesListArgs.category
+        viewModel.loadCategory(Json.decodeFromString(categoryJson))
 
         return binding.root
     }

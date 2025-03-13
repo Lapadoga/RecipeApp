@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.recipeapp.data.STUB
+import com.example.recipeapp.data.repositories.RecipesRepository
 import com.example.recipeapp.databinding.FragmentListCategoriesBinding
+import kotlinx.serialization.json.Json
 
 class CategoriesListFragment : Fragment() {
     private var _binding: FragmentListCategoriesBinding? = null
@@ -55,11 +57,14 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val category = STUB.getCategoryById(categoryId) ?: throw IllegalArgumentException()
-        findNavController().navigate(
-            CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
-                category
+        val category = viewModel.repository.getCategoryById(categoryId)
+        if (category == null)
+            Toast.makeText(context, RecipesRepository.ERROR_TEXT, Toast.LENGTH_SHORT).show()
+        else
+            findNavController().navigate(
+                CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                    Json.encodeToString(category)
+                )
             )
-        )
     }
 }
