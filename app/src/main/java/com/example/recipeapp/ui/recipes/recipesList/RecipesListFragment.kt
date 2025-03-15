@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.recipeapp.R
 import com.example.recipeapp.databinding.FragmentListRecipesBinding
 import kotlinx.serialization.json.Json
@@ -41,7 +42,11 @@ class RecipesListFragment : Fragment() {
         with(binding) {
             viewModel.currentRecipes.observe(viewLifecycleOwner) { currentState ->
                 recipesAdapter.setDataSet(currentState.recipes)
-                ivRecipesHeader.setImageDrawable(currentState.categoryImage)
+                Glide.with(this@RecipesListFragment)
+                    .load(currentState.categoryImageUrn)
+                    .placeholder(R.drawable.img_placeholder)
+                    .error(R.drawable.img_error)
+                    .into(ivRecipesHeader)
                 ivRecipesHeader.contentDescription =
                     "${getString(R.string.text_item_category_description)} ${currentState.categoryTitle}"
                 tvRecipesHeader.text = currentState.categoryTitle

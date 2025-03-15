@@ -8,7 +8,9 @@ import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.recipeapp.R
+import com.example.recipeapp.data.repositories.RecipesRepository
 import com.example.recipeapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
@@ -53,7 +55,13 @@ class RecipeFragment : Fragment() {
                     val recipe = currentState.recipe
 
                     tvRecipeTitle.text = recipe.title
-                    ivRecipe.setImageDrawable(currentState.recipeImage)
+                    val imageUri = RecipesRepository.RECIPE_API_BASE_URL +
+                            RecipesRepository.RECIPE_API_IMAGES_CATALOG + currentState.recipe.imageUrl
+                    Glide.with(this@RecipeFragment)
+                        .load(imageUri)
+                        .placeholder(R.drawable.img_placeholder)
+                        .error(R.drawable.img_error)
+                        .into(ivRecipe)
                     ivRecipe.contentDescription =
                         "${getString(R.string.text_item_category_description)} ${recipe.title.lowercase()}"
 

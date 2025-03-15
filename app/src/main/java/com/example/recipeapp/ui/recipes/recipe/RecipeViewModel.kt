@@ -2,8 +2,6 @@ package com.example.recipeapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -12,7 +10,6 @@ import com.example.recipeapp.data.repositories.RecipesRepository
 import com.example.recipeapp.model.Recipe
 import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.FAVORITES_FILE_KEY
 import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.RECIPES_ID_KEY
-import java.io.IOException
 
 class RecipeViewModel(private val application: Application) : AndroidViewModel(application) {
 
@@ -20,7 +17,6 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         val isFavorite: Boolean = false,
         val portionSize: Int = 1,
         val recipe: Recipe? = null,
-        val recipeImage: Drawable? = null,
     )
 
     private val repository = RecipesRepository()
@@ -42,21 +38,12 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
                 Toast.LENGTH_SHORT
             ).show()
         else {
-            val drawable =
-                try {
-                    val stream = application.assets.open(recipe.imageUrl)
-                    Drawable.createFromStream(stream, null)
-                } catch (e: IOException) {
-                    Log.e("Drawable", e.stackTraceToString())
-                    null
-                }
             val favoriteRecipes = getFavorites()
 
-            mutableCurrentRecipe.value = RecipeState(
-                favoriteRecipes.contains(recipeId.toString()),
-                currentRecipe.value?.portionSize ?: 1,
-                recipe,
-                drawable
+            mutableCurrentRecipe.value = currentRecipe.value?.copy(
+                isFavorite = favoriteRecipes.contains(recipeId.toString()),
+                portionSize = currentRecipe.value?.portionSize ?: 1,
+                recipe = recipe
             )
         }
     }
@@ -71,13 +58,13 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         }
 
         mutableCurrentRecipe.value =
-            mutableCurrentRecipe.value?.copy(isFavorite = newIsFavoriteState)
+            currentRecipe.value?.copy(isFavorite = newIsFavoriteState)
 
         saveFavorites(favoriteRecipes)
     }
 
     fun onSeekBarChange(newPortionSize: Int) {
-        mutableCurrentRecipe.value = mutableCurrentRecipe.value?.copy(portionSize = newPortionSize)
+        mutableCurrentRecipe.value = currentRecipe.value?.copy(portionSize = newPortionSize)
     }
 
     private fun getFavorites(): MutableSet<String> {
