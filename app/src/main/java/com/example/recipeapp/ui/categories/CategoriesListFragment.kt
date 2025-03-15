@@ -57,7 +57,7 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val category = viewModel.repository.getCategoryById(categoryId)
+        val category = viewModel.currentCategories.value?.categories?.find { it.id == categoryId }
         if (category == null)
             Toast.makeText(context, RecipesRepository.ERROR_TEXT, Toast.LENGTH_SHORT).show()
         else

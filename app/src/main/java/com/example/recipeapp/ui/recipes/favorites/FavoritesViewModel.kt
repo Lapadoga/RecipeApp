@@ -23,7 +23,7 @@ class FavoritesViewModel(private val application: Application) : AndroidViewMode
 
     fun loadFavoriteRecipes() {
         val favoriteRecipesIds = getFavorites()
-        val favoriteRecipes = if (favoriteRecipesIds.isEmpty()) listOf<Recipe>() else
+        val favoriteRecipes = if (favoriteRecipesIds.isEmpty()) listOf() else
             repository.getRecipesByIds(favoriteRecipesIds)
         if (favoriteRecipes == null)
             Toast.makeText(
@@ -32,7 +32,8 @@ class FavoritesViewModel(private val application: Application) : AndroidViewMode
                 Toast.LENGTH_SHORT
             ).show()
         else
-            mutableCurrentFavoriteRecipes.value = FavoriteRecipesState(favoriteRecipes)
+            mutableCurrentFavoriteRecipes.value =
+                currentFavoriteRecipes.value?.copy(recipes = favoriteRecipes)
     }
 
     private fun getFavorites(): String {

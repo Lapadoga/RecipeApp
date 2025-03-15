@@ -1,16 +1,15 @@
 package com.example.recipeapp.ui.categories
 
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.recipeapp.R
+import com.example.recipeapp.data.repositories.RecipesRepository
 import com.example.recipeapp.databinding.ItemCategoryBinding
 import com.example.recipeapp.model.Category
-import java.io.IOException
 
 
 class CategoriesListAdapter(private var dataSet: List<Category>) :
@@ -42,16 +41,15 @@ class CategoriesListAdapter(private var dataSet: List<Category>) :
 
         val positionData = dataSet[position]
         val context = viewHolder.itemView.context
-        val drawable = try {
-            val stream = context?.assets?.open(positionData.imageUrl)
-            Drawable.createFromStream(stream, null)
-        } catch (e: IOException) {
-            Log.e("error", e.stackTraceToString())
-            null
-        }
+        val imageUri = RecipesRepository.RECIPE_API_BASE_URL +
+                RecipesRepository.RECIPE_API_IMAGES_CATALOG + positionData.imageUrl
         viewHolder.itemTitle.text = positionData.title
         viewHolder.itemDescription.text = positionData.description
-        viewHolder.itemImage.setImageDrawable(drawable)
+        Glide.with(context)
+            .load(imageUri)
+            .placeholder(R.drawable.img_placeholder)
+            .error(R.drawable.img_error)
+            .into(viewHolder.itemImage)
         viewHolder.itemImage.contentDescription =
             "${context.getString(R.string.text_item_category_description)} ${positionData.title.lowercase()}"
 
