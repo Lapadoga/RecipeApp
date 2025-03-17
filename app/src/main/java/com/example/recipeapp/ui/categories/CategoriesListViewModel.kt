@@ -15,7 +15,7 @@ class CategoriesListViewModel(private val application: Application) :
         val categories: List<Category> = listOf(),
     )
 
-    val repository = RecipesRepository()
+    private val repository = RecipesRepository()
     private val mutableCurrentCategories = MutableLiveData(CategoriesListState())
     val currentCategories: LiveData<CategoriesListState> get() = mutableCurrentCategories
 
@@ -28,7 +28,7 @@ class CategoriesListViewModel(private val application: Application) :
                 Toast.LENGTH_SHORT
             ).show()
         else {
-            mutableCurrentCategories.value = CategoriesListState(data)
+            mutableCurrentCategories.value = currentCategories.value?.copy(categories = data)
         }
     }
 

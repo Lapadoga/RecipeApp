@@ -6,15 +6,21 @@ import com.example.recipeapp.model.Recipe
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
 class RecipesRepository {
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        .build()
     private val retrofit = Retrofit.Builder()
         .baseUrl(RECIPE_API_BASE_URL)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .client(client)
         .build()
     private val service = retrofit.create(RecipeApiService::class.java)
     private val threadPool = Executors.newFixedThreadPool(NUMBER_OF_THREADS)
@@ -107,5 +113,6 @@ class RecipesRepository {
         const val RECIPE_API_BASE_URL = "https://recipes.androidsprint.ru/api/"
         const val NUMBER_OF_THREADS = 10
         const val ERROR_TEXT = "Ошибка получения данных"
+        const val RECIPE_API_IMAGES_CATALOG = "images/"
     }
 }
