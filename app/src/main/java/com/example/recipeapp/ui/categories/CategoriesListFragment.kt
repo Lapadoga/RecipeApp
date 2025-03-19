@@ -44,6 +44,8 @@ class CategoriesListFragment : Fragment() {
     private fun initRecycler() {
         viewModel.currentCategories.observe(viewLifecycleOwner) { currentState ->
             categoriesAdapter.setDataSet(currentState.categories)
+            if (currentState.categories.isNotEmpty())
+                categoriesAdapter.notifyDataSetChanged()
         }
         with(binding) {
             rvCategories.adapter = categoriesAdapter

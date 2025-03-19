@@ -4,14 +4,14 @@ import com.example.recipeapp.data.services.RecipeApiService
 import com.example.recipeapp.model.Category
 import com.example.recipeapp.model.Recipe
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
 
 class RecipesRepository {
     private val client = OkHttpClient.Builder()
@@ -23,95 +23,88 @@ class RecipesRepository {
         .client(client)
         .build()
     private val service = retrofit.create(RecipeApiService::class.java)
-    private val threadPool = Executors.newFixedThreadPool(NUMBER_OF_THREADS)
 
-    fun getCategories(): List<Category>? {
-        val task: Callable<retrofit2.Response<List<Category>>> = Callable {
+    suspend fun getCategories(): List<Category>? {
+        val response: Response<List<Category>>?
+        withContext(Dispatchers.IO) {
             val categoriesCall = service.getCategories()
-            categoriesCall.execute()
+            response = categoriesCall.execute()
         }
-        val future: Future<retrofit2.Response<List<Category>>> = threadPool.submit(task)
 
         val result = try {
-            val response = future.get()
-            response.body()
+            response?.body()
         } catch (e: Exception) {
             null
         }
         return result
     }
 
-    fun getCategoryById(id: Int): Category? {
-        val task: Callable<retrofit2.Response<Category>> = Callable {
+    suspend fun getCategoryById(id: Int): Category? {
+        var response: Response<Category>?
+        withContext(Dispatchers.IO) {
             val categoryCall = service.getCategoryById(id)
-            categoryCall.execute()
+            response = categoryCall.execute()
         }
-        val future: Future<retrofit2.Response<Category>> = threadPool.submit(task)
 
         val result = try {
-            val response = future.get()
-            response.body()
+            response?.body()
         } catch (e: Exception) {
             null
         }
+
         return result
     }
 
-    fun getRecipesByCategoryId(id: Int): List<Recipe>? {
-        val task: Callable<retrofit2.Response<List<Recipe>>> = Callable {
+    suspend fun getRecipesByCategoryId(id: Int): List<Recipe>? {
+        var response: Response<List<Recipe>>?
+        withContext(Dispatchers.IO) {
             val recipesCall = service.getRecipesByCategoryId(id)
-            recipesCall.execute()
+            response = recipesCall.execute()
         }
-        val future: Future<retrofit2.Response<List<Recipe>>> = threadPool.submit(task)
 
         val result = try {
-            val response = future.get()
-            response.body()
+            response?.body()
         } catch (e: Exception) {
             null
         }
+
         return result
     }
 
-    fun getRecipeById(id: Int): Recipe? {
-        val task: Callable<retrofit2.Response<Recipe>> = Callable {
+    suspend fun getRecipeById(id: Int): Recipe? {
+        var response: Response<Recipe>?
+        withContext(Dispatchers.IO) {
             val recipeCall = service.getRecipeById(id)
-            recipeCall.execute()
+            response = recipeCall.execute()
         }
-        val future: Future<retrofit2.Response<Recipe>> = threadPool.submit(task)
 
         val result = try {
-            val response = future.get()
-            response.body()
+            response?.body()
         } catch (e: Exception) {
             null
         }
+
         return result
     }
 
-    fun getRecipesByIds(ids: String): List<Recipe>? {
-        val task: Callable<retrofit2.Response<List<Recipe>>> = Callable {
+    suspend fun getRecipesByIds(ids: String): List<Recipe>? {
+        var response: Response<List<Recipe>>?
+        withContext(Dispatchers.IO) {
             val recipesCall = service.getRecipesByIds(ids)
-            recipesCall.execute()
+            response = recipesCall.execute()
         }
-        val future: Future<retrofit2.Response<List<Recipe>>> = threadPool.submit(task)
 
         val result = try {
-            val response = future.get()
-            response.body()
+            response?.body()
         } catch (e: Exception) {
             null
         }
-        return result
-    }
 
-    fun shutdownPull() {
-        threadPool.shutdown()
+        return result
     }
 
     companion object {
         const val RECIPE_API_BASE_URL = "https://recipes.androidsprint.ru/api/"
-        const val NUMBER_OF_THREADS = 10
         const val ERROR_TEXT = "Ошибка получения данных"
         const val RECIPE_API_IMAGES_CATALOG = "images/"
     }

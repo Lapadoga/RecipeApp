@@ -43,13 +43,15 @@ class RecipesListFragment : Fragment() {
             viewModel.currentRecipes.observe(viewLifecycleOwner) { currentState ->
                 recipesAdapter.setDataSet(currentState.recipes)
                 Glide.with(this@RecipesListFragment)
-                    .load(currentState.categoryImageUrn)
+                    .load(currentState.categoryImageUrl)
                     .placeholder(R.drawable.img_placeholder)
                     .error(R.drawable.img_error)
                     .into(ivRecipesHeader)
                 ivRecipesHeader.contentDescription =
                     "${getString(R.string.text_item_category_description)} ${currentState.categoryTitle}"
                 tvRecipesHeader.text = currentState.categoryTitle
+                if (currentState.recipes.isNotEmpty())
+                    recipesAdapter.notifyDataSetChanged()
             }
             recipesAdapter.setOnItemClickListener(object :
                 RecipesListAdapter.OnItemClickListener {
