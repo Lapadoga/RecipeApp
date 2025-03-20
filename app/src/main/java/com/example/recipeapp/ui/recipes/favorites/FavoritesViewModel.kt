@@ -6,10 +6,12 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.recipeapp.data.repositories.RecipesRepository
 import com.example.recipeapp.model.Recipe
 import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.FAVORITES_FILE_KEY
 import com.example.recipeapp.ui.recipes.recipe.RecipeFragment.Companion.RECIPES_ID_KEY
+import kotlinx.coroutines.launch
 
 class FavoritesViewModel(private val application: Application) : AndroidViewModel(application) {
 
@@ -23,17 +25,20 @@ class FavoritesViewModel(private val application: Application) : AndroidViewMode
 
     fun loadFavoriteRecipes() {
         val favoriteRecipesIds = getFavorites()
-        val favoriteRecipes = if (favoriteRecipesIds.isEmpty()) listOf() else
-            repository.getRecipesByIds(favoriteRecipesIds)
-        if (favoriteRecipes == null)
-            Toast.makeText(
-                application.baseContext,
-                RecipesRepository.ERROR_TEXT,
-                Toast.LENGTH_SHORT
-            ).show()
-        else
-            mutableCurrentFavoriteRecipes.value =
-                currentFavoriteRecipes.value?.copy(recipes = favoriteRecipes)
+        viewModelScope.launch {
+            val favoriteRecipes = if (favoriteRecipesIds.isEmpty()) listOf() else
+                repository.getRecipesByIds(favoriteRecipesIds)
+
+            if (favoriteRecipes == null)
+                Toast.makeText(
+                    application.baseContext,
+                    RecipesRepository.ERROR_TEXT,
+                    Toast.LENGTH_SHORT
+                ).show()
+            else
+                mutableCurrentFavoriteRecipes.value =
+                    currentFavoriteRecipes.value?.copy(recipes = favoriteRecipes)
+        }
     }
 
     private fun getFavorites(): String {
@@ -43,10 +48,5 @@ class FavoritesViewModel(private val application: Application) : AndroidViewMode
         ).getStringSet(RECIPES_ID_KEY, setOf())
         val data = recipesId?.joinToString(",") ?: ""
         return data
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        repository.shutdownPull()
     }
 }

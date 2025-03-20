@@ -41,10 +41,14 @@ class FavoritesFragment : Fragment() {
     private fun initUI() {
         viewModel.currentFavoriteRecipes.observe(viewLifecycleOwner) { currentState ->
             favoritesAdapter.setDataSet(currentState.recipes)
-            if (currentState.recipes.isEmpty()) {
-                with(binding) {
+            with(binding) {
+                if (currentState.recipes.isEmpty()) {
                     rvFavorites.visibility = View.GONE
                     tvNoFavorites.visibility = View.VISIBLE
+                } else {
+                    rvFavorites.visibility = View.VISIBLE
+                    tvNoFavorites.visibility = View.GONE
+                    favoritesAdapter.notifyDataSetChanged()
                 }
             }
         }

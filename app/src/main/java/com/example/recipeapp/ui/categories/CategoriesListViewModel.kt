@@ -5,8 +5,10 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.recipeapp.data.repositories.RecipesRepository
 import com.example.recipeapp.model.Category
+import kotlinx.coroutines.launch
 
 class CategoriesListViewModel(private val application: Application) :
     AndroidViewModel(application) {
@@ -20,20 +22,17 @@ class CategoriesListViewModel(private val application: Application) :
     val currentCategories: LiveData<CategoriesListState> get() = mutableCurrentCategories
 
     fun loadCategories() {
-        val data = repository.getCategories()
-        if (data == null)
-            Toast.makeText(
-                application.baseContext,
-                RecipesRepository.ERROR_TEXT,
-                Toast.LENGTH_SHORT
-            ).show()
-        else {
-            mutableCurrentCategories.value = currentCategories.value?.copy(categories = data)
+        viewModelScope.launch {
+            val data = repository.getCategories()
+            if (data == null)
+                Toast.makeText(
+                    application.baseContext,
+                    RecipesRepository.ERROR_TEXT,
+                    Toast.LENGTH_SHORT
+                ).show()
+            else {
+                mutableCurrentCategories.value = currentCategories.value?.copy(categories = data)
+            }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        repository.shutdownPull()
     }
 }
