@@ -1,5 +1,8 @@
 package com.example.recipeapp.data.repositories
 
+import android.content.Context
+import androidx.room.Room
+import com.example.recipeapp.data.database.AppDatabase
 import com.example.recipeapp.data.services.RecipeApiService
 import com.example.recipeapp.model.Category
 import com.example.recipeapp.model.Recipe
@@ -12,7 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-class RecipesRepository {
+class RecipesRepository(context: Context) {
     private val client = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .build()
@@ -23,6 +26,12 @@ class RecipesRepository {
         .build()
     private val service = retrofit.create(RecipeApiService::class.java)
     private val dispatcher = Dispatchers.IO
+    private val database = Room.databaseBuilder(
+        context,
+        AppDatabase::class.java,
+        "database-recipes"
+    ).build()
+    private val categoriesDao = database.categoriesDao()
 
     suspend fun getCategories(): List<Category>? {
         val result = try {
@@ -35,6 +44,8 @@ class RecipesRepository {
 
         return result
     }
+
+    suspend fun getCategoriesFromCache(): List<Category> = categoriesDao.getAll()
 
     suspend fun getCategoryById(id: Int): Category? {
         val result = try {
@@ -82,6 +93,10 @@ class RecipesRepository {
         }
 
         return result
+    }
+
+    suspend fun cacheCategories(categories: List<Category>) {
+        categoriesDao.insertAll(categories)
     }
 
     companion object {

@@ -19,7 +19,7 @@ class RecipesListViewModel(private val application: Application) : AndroidViewMo
         val categoryImageUrl: String = "",
     )
 
-    private val repository = RecipesRepository()
+    private val repository = RecipesRepository(application.applicationContext)
     private val mutableCurrentRecipes = MutableLiveData(RecipesListState())
     val currentRecipes: LiveData<RecipesListState> get() = mutableCurrentRecipes
 

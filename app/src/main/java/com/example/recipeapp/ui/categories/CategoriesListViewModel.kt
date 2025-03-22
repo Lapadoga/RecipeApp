@@ -17,12 +17,15 @@ class CategoriesListViewModel(private val application: Application) :
         val categories: List<Category> = listOf(),
     )
 
-    private val repository = RecipesRepository()
+    private val repository = RecipesRepository(application.applicationContext)
     private val mutableCurrentCategories = MutableLiveData(CategoriesListState())
     val currentCategories: LiveData<CategoriesListState> get() = mutableCurrentCategories
 
     fun loadCategories() {
         viewModelScope.launch {
+            val cachedData = repository.getCategoriesFromCache()
+            mutableCurrentCategories.value = currentCategories.value?.copy(categories = cachedData)
+
             val data = repository.getCategories()
             if (data == null)
                 Toast.makeText(
@@ -32,6 +35,7 @@ class CategoriesListViewModel(private val application: Application) :
                 ).show()
             else {
                 mutableCurrentCategories.value = currentCategories.value?.copy(categories = data)
+                repository.cacheCategories(data)
             }
         }
     }

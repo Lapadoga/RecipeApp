@@ -22,7 +22,7 @@ class RecipeViewModel(private val application: Application) : AndroidViewModel(a
         val recipeImageUrl: String = "",
     )
 
-    private val repository = RecipesRepository()
+    private val repository = RecipesRepository(application.applicationContext)
     private val sharedPreferences by lazy {
         application.getSharedPreferences(
             FAVORITES_FILE_KEY,
