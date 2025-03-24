@@ -30,8 +30,9 @@ class RecipesRepository(context: Context) {
         context,
         AppDatabase::class.java,
         "database-recipes"
-    ).build()
+    ).fallbackToDestructiveMigration().build()
     private val categoriesDao = database.categoriesDao()
+    private val recipesDao = database.recipesDao()
 
     suspend fun getCategories(): List<Category>? {
         val result = try {
@@ -59,8 +60,12 @@ class RecipesRepository(context: Context) {
         return result
     }
 
+    suspend fun cacheCategories(categories: List<Category>) {
+        categoriesDao.insertAll(categories)
+    }
+
     suspend fun getRecipesByCategoryId(id: Int): List<Recipe>? {
-        val result = try {
+        val responce = try {
             withContext(dispatcher) {
                 service.getRecipesByCategoryId(id)
             }
@@ -68,8 +73,13 @@ class RecipesRepository(context: Context) {
             null
         }
 
+        val result = responce?.map { it.copy(categoryId = id) }
+
         return result
     }
+
+    suspend fun getRecipesByCategoryIdFromCache(categoryId: Int): List<Recipe> =
+        recipesDao.getAllByCategoryId(categoryId)
 
     suspend fun getRecipeById(id: Int): Recipe? {
         val result = try {
@@ -95,8 +105,8 @@ class RecipesRepository(context: Context) {
         return result
     }
 
-    suspend fun cacheCategories(categories: List<Category>) {
-        categoriesDao.insertAll(categories)
+    suspend fun cacheRecipes(recipes: List<Recipe>) {
+        recipesDao.insertAll(recipes)
     }
 
     companion object {
