@@ -26,16 +26,19 @@ class CategoriesListViewModel(private val application: Application) :
             val cachedData = repository.getCategoriesFromCache()
             mutableCurrentCategories.value = currentCategories.value?.copy(categories = cachedData)
 
-            val data = repository.getCategories()
-            if (data == null)
-                Toast.makeText(
-                    application.baseContext,
-                    RecipesRepository.ERROR_TEXT,
-                    Toast.LENGTH_SHORT
-                ).show()
-            else {
-                mutableCurrentCategories.value = currentCategories.value?.copy(categories = data)
-                repository.cacheCategories(data)
+            launch {
+                val data = repository.getCategories()
+                if (data == null)
+                    Toast.makeText(
+                        application.baseContext,
+                        RecipesRepository.ERROR_TEXT,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                else {
+                    mutableCurrentCategories.value =
+                        currentCategories.value?.copy(categories = data)
+                    repository.cacheCategories(data)
+                }
             }
         }
     }

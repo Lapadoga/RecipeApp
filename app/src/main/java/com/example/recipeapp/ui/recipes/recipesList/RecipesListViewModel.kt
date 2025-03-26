@@ -25,20 +25,33 @@ class RecipesListViewModel(private val application: Application) : AndroidViewMo
 
     fun loadCategory(category: Category) {
         viewModelScope.launch {
-            val data = repository.getRecipesByCategoryId(category.id)
-            if (data == null)
-                Toast.makeText(
-                    application.baseContext,
-                    RecipesRepository.ERROR_TEXT,
-                    Toast.LENGTH_SHORT
-                ).show()
-            else
-                mutableCurrentRecipes.value = currentRecipes.value?.copy(
-                    recipes = data,
-                    categoryTitle = category.title,
-                    categoryImageUrl = RecipesRepository.RECIPE_API_BASE_URL +
-                            RecipesRepository.RECIPE_API_IMAGES_CATALOG + category.imageUrl
-                )
+            val cachedData = repository.getRecipesByCategoryIdFromCache(category.id)
+            mutableCurrentRecipes.value = currentRecipes.value?.copy(
+                recipes = cachedData,
+                categoryTitle = category.title,
+                categoryImageUrl = RecipesRepository.RECIPE_API_BASE_URL +
+                        RecipesRepository.RECIPE_API_IMAGES_CATALOG + category.imageUrl
+            )
+
+            launch {
+                val data = repository.getRecipesByCategoryId(category.id)
+                if (data == null)
+                    Toast.makeText(
+                        application.baseContext,
+                        RecipesRepository.ERROR_TEXT,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                else {
+                    mutableCurrentRecipes.value = currentRecipes.value?.copy(
+                        recipes = data,
+                        categoryTitle = category.title,
+                        categoryImageUrl = RecipesRepository.RECIPE_API_BASE_URL +
+                                RecipesRepository.RECIPE_API_IMAGES_CATALOG + category.imageUrl
+                    )
+
+                    repository.cacheRecipes(data)
+                }
+            }
         }
     }
 }
