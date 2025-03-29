@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.recipeapp.data.repositories.RecipesRepository
 import com.example.recipeapp.databinding.FragmentFavoritesBinding
 import com.example.recipeapp.ui.recipes.recipesList.RecipesListAdapter
+import kotlinx.serialization.json.Json
 
 class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
@@ -61,10 +64,14 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        findNavController().navigate(
-            FavoritesFragmentDirections.actionFavoritesFragmentToRecipeFragment(
-                recipeId
+        val recipe = viewModel.currentFavoriteRecipes.value?.recipes?.find { it.id == recipeId }
+        if (recipe == null)
+            Toast.makeText(context, RecipesRepository.ERROR_TEXT, Toast.LENGTH_SHORT).show()
+        else
+            findNavController().navigate(
+                FavoritesFragmentDirections.actionFavoritesFragmentToRecipeFragment(
+                    Json.encodeToString(recipe)
+                )
             )
-        )
     }
 }

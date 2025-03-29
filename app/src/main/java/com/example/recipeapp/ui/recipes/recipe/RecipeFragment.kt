@@ -11,7 +11,9 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.recipeapp.R
 import com.example.recipeapp.databinding.FragmentRecipeBinding
+import com.example.recipeapp.model.Recipe
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import kotlinx.serialization.json.Json
 
 class RecipeFragment : Fragment() {
     private var _binding: FragmentRecipeBinding? = null
@@ -28,8 +30,8 @@ class RecipeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val recipeId = recipeFragmentArgs.recipeId
-        viewModel.loadRecipe(recipeId)
+        val recipe = Json.decodeFromString<Recipe>(recipeFragmentArgs.recipe)
+        viewModel.loadRecipe(recipe)
 
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
         return binding.root
@@ -63,7 +65,7 @@ class RecipeFragment : Fragment() {
                         "${getString(R.string.text_item_category_description)} ${recipe.title.lowercase()}"
 
                     val drawableId =
-                        if (currentState.isFavorite) {
+                        if (currentState.recipe.isFavorite) {
                             isFavorite = true
                             R.drawable.ic_heart
                         } else {
@@ -120,11 +122,6 @@ class RecipeFragment : Fragment() {
             methodDividerDecoration.dividerInsetEnd = dividerInset
             rvMethod.addItemDecoration(methodDividerDecoration)
         }
-    }
-
-    companion object {
-        const val FAVORITES_FILE_KEY = "com.example.recipeapp.favorites"
-        const val RECIPES_ID_KEY = "favoriteRecipes"
     }
 }
 
