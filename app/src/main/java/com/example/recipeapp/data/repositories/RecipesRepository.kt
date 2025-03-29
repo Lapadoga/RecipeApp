@@ -48,24 +48,12 @@ class RecipesRepository(context: Context) {
 
     suspend fun getCategoriesFromCache(): List<Category> = categoriesDao.getAll()
 
-    suspend fun getCategoryById(id: Int): Category? {
-        val result = try {
-            withContext(dispatcher) {
-                service.getCategoryById(id)
-            }
-        } catch (e: Exception) {
-            null
-        }
-
-        return result
-    }
-
     suspend fun cacheCategories(categories: List<Category>) {
         categoriesDao.insertAll(categories)
     }
 
-    suspend fun getRecipesByCategoryId(id: Int): List<Recipe>? {
-        val responce = try {
+    suspend fun getRecipesByCategoryId(id: Int, favoriteRecipesIds: List<Int>): List<Recipe>? {
+        val response = try {
             withContext(dispatcher) {
                 service.getRecipesByCategoryId(id)
             }
@@ -73,7 +61,11 @@ class RecipesRepository(context: Context) {
             null
         }
 
-        val result = responce?.map { it.copy(categoryId = id) }
+        val result = response?.map { currentRecipe ->
+            currentRecipe.copy(
+                categoryId = id,
+                isFavorite = favoriteRecipesIds.find { it == currentRecipe.id } != null)
+        }
 
         return result
     }
@@ -81,33 +73,23 @@ class RecipesRepository(context: Context) {
     suspend fun getRecipesByCategoryIdFromCache(categoryId: Int): List<Recipe> =
         recipesDao.getAllByCategoryId(categoryId)
 
-    suspend fun getRecipeById(id: Int): Recipe? {
-        val result = try {
-            withContext(dispatcher) {
-                service.getRecipeById(id)
-            }
-        } catch (e: Exception) {
-            null
-        }
-
-        return result
-    }
-
-    suspend fun getRecipesByIds(ids: String): List<Recipe>? {
-        val result = try {
-            withContext(dispatcher) {
-                service.getRecipesByIds(ids)
-            }
-        } catch (e: Exception) {
-            null
-        }
-
-        return result
-    }
-
     suspend fun cacheRecipes(recipes: List<Recipe>) {
-        recipesDao.insertAll(recipes)
+        val idsList = recipes.map { it.id }
+        val existingRecipes = recipesDao.getAllByIds(idsList)
+        val newRecipes = mutableListOf<Recipe>()
+        val recipesToUpdate = mutableListOf<Recipe>()
+        recipes.forEach { currentRecipe ->
+            if (existingRecipes.find { currentRecipe.id == it.id } == null)
+                newRecipes.add(currentRecipe)
+            else
+                recipesToUpdate.add(currentRecipe)
+        }
+        recipesDao.updateAll(recipesToUpdate)
+        if (newRecipes.isNotEmpty())
+            recipesDao.insertAll(newRecipes)
     }
+
+    suspend fun getFavoriteRecipes() = recipesDao.getFavoriteList()
 
     companion object {
         const val RECIPE_API_BASE_URL = "https://recipes.androidsprint.ru/api/"

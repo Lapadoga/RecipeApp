@@ -22,5 +22,6 @@ data class Recipe(
     @ColumnInfo val ingredients: List<Ingredient>,
     @ColumnInfo val method: List<String>,
     @ColumnInfo(name = "image_url") val imageUrl: String,
-    @ColumnInfo(name = "category_id") val categoryId: Int? = null,
+    @ColumnInfo(name = "is_favorite") val isFavorite: Boolean = false,
+    @ColumnInfo(name = "category_id") val categoryId: Int? = null
 )

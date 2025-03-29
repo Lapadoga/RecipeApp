@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.recipeapp.R
+import com.example.recipeapp.data.repositories.RecipesRepository
 import com.example.recipeapp.databinding.FragmentListRecipesBinding
 import kotlinx.serialization.json.Json
 
@@ -69,10 +71,14 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        findNavController().navigate(
-            RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(
-                recipeId
+        val recipe = viewModel.currentRecipes.value?.recipes?.find { it.id == recipeId }
+        if (recipe == null)
+            Toast.makeText(context, RecipesRepository.ERROR_TEXT, Toast.LENGTH_SHORT).show()
+        else
+            findNavController().navigate(
+                RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(
+                    Json.encodeToString(recipe)
+                )
             )
-        )
     }
 }

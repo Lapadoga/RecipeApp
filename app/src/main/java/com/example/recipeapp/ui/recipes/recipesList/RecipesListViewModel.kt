@@ -34,7 +34,10 @@ class RecipesListViewModel(private val application: Application) : AndroidViewMo
             )
 
             launch {
-                val data = repository.getRecipesByCategoryId(category.id)
+                val favoriteRecipesIds = mutableListOf<Int>()
+                val recipes = currentRecipes.value?.recipes
+                recipes?.forEach { if (it.isFavorite) favoriteRecipesIds.add(it.id) }
+                val data = repository.getRecipesByCategoryId(category.id, favoriteRecipesIds)
                 if (data == null)
                     Toast.makeText(
                         application.baseContext,
